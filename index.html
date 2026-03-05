@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WikiPerché — par La Maison Perchée</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* =============================================
+       Variables et reset
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --fond: #faf7f2;
+      --jaune: #f5c842;
+      --jaune-clair: #fff8e0;
+      --jaune-tag: #fef3cc;
+      --texte: #1e2420;
+      --texte-doux: #5a5450;
+      --texte-tres-doux: #8a8480;
+      --carte-fond: #ffffff;
+      --carte-bord: #e5e0d8;
+      --tag-fond: #f0ebe2;
+      --tag-texte: #6b6158;
+      --rayon: 12px;
+      --ombre: 0 2px 8px rgba(30,36,32,0.07);
+      --ombre-hover: 0 6px 20px rgba(30,36,32,0.13);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--fond);
+      color: var(--texte);
+      min-height: 100vh;
+    }
+
+    /* =============================================
+       Header sticky
+    ============================================= */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffff;
+      border-bottom: 3px solid var(--jaune);
+      padding: 12px 20px;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .logo-bloc {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .logo-titre {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--texte);
+      letter-spacing: -0.01em;
+    }
+
+    .logo-sous {
+      font-size: 0.8rem;
+      color: var(--texte-doux);
+      font-weight: 400;
+    }
+
+    .compteur {
+      background: var(--fond);
+      border: 1px solid var(--carte-bord);
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.78rem;
+      color: var(--texte-doux);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .recherche-wrap {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .recherche {
+      width: 100%;
+      padding: 9px 16px 9px 38px;
+      border: 1.5px solid var(--carte-bord);
+      border-radius: 999px;
+      background: var(--fond);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--texte);
+      outline: none;
+      transition: border-color 0.2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a8480' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 12px center;
+    }
+    .recherche:focus {
+      border-color: var(--jaune);
+      background-color: #ffffff;
+    }
+    .recherche::placeholder { color: var(--texte-tres-doux); }
+
+    /* =============================================
+       Zone de filtres (sous le header)
+    ============================================= */
+    .filtres-zone {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px 4px;
+    }
+
+    /* Barre de chips scrollable horizontalement sur mobile */
+    .chips-barre {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;
+    }
+    .chips-barre::-webkit-scrollbar { display: none; }
+
+    /* --- Tabs de section (niveau 1) --- */
+    .tab-section {
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      background: var(--tag-fond);
+      color: var(--tag-texte);
+      white-space: nowrap;
+      transition: background 0.18s, color 0.18s;
+      flex-shrink: 0;
+    }
+    .tab-section:hover { background: #e8e2d8; }
+    .tab-section.actif {
+      background: var(--jaune);
+      color: var(--texte);
+    }
+    .tab-section:focus-visible {
+      outline: 3px solid var(--jaune);
+      outline-offset: 2px;
+    }
+
+    /* Séparateur de groupe de filtres */
+    .filtre-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--texte-tres-doux);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding-top: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    /* --- Chips type et trouble (niveaux 2 et 3) --- */
+    .chip {
+      padding: 5px 13px;
+      border-radius: 999px;
+      border: 1.5px solid var(--carte-bord);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      background: #ffffff;
+      color: var(--texte-doux);
+      white-space: nowrap;
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+      flex-shrink: 0;
+    }
+    .chip:hover { background: var(--fond); border-color: #c8c0b4; }
+    .chip:focus-visible {
+      outline: 3px solid var(--jaune);
+      outline-offset: 2px;
+    }
+
+    /* Chip type actif */
+    .chip-type.actif {
+      background: var(--jaune-clair);
+      border-color: var(--jaune);
+      color: var(--texte);
+      font-weight: 500;
+    }
+
+    /* Chip trouble actif */
+    .chip-trouble.actif {
+      background: var(--jaune-tag);
+      border-color: #d4a017;
+      color: #6b4f00;
+      font-weight: 500;
+    }
+
+    .filtres-diviseur {
+      height: 1px;
+      background: var(--carte-bord);
+      margin: 0 20px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* =============================================
+       Grille de cartes
+    ============================================= */
+    .grille-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 20px 60px;
+    }
+
+    .grille {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    /* =============================================
+       Carte ressource
+    ============================================= */
+    .carte {
+      background: var(--carte-fond);
+      border: 1px solid var(--carte-bord);
+      border-radius: var(--rayon);
+      box-shadow: var(--ombre);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s;
+      overflow: hidden;
+    }
+    .carte:hover {
+      box-shadow: var(--ombre-hover);
+      transform: translateY(-2px);
+    }
+
+    .carte-corps {
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .carte-icone {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: #fef9e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .carte-contenu {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .carte-titre {
+      font-family: 'Fraunces', serif;
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--texte);
+    }
+
+    .carte-desc {
+      font-size: 0.83rem;
+      color: var(--texte-doux);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .carte-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 0 16px 14px;
+    }
+
+    .carte-tag {
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--tag-fond);
+      color: var(--tag-texte);
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .carte-lien-bloc {
+      border-top: 1px solid var(--carte-bord);
+      padding: 10px 16px;
+    }
+
+    .carte-lien {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #6b4f00;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .carte-lien:hover { color: var(--texte); text-decoration: underline; }
+    .carte-lien:focus-visible {
+      outline: 3px solid var(--jaune);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* =============================================
+       État vide
+    ============================================= */
+    .etat-vide {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--texte-doux);
+    }
+    .etat-vide-emoji { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+    .etat-vide-titre {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: var(--texte);
+    }
+    .etat-vide-msg { font-size: 0.88rem; }
+
+    /* =============================================
+       Responsive mobile
+    ============================================= */
+    @media (max-width: 600px) {
+      .header-inner { gap: 10px; }
+      .logo-sous { display: none; }
+      .logo-titre { font-size: 1.25rem; }
+      .recherche-wrap { width: 100%; order: 3; min-width: unset; }
+      .grille-wrapper { padding: 14px 12px 48px; }
+      .grille { grid-template-columns: 1fr; gap: 12px; }
+    }
+
+    /* =============================================
+       Barre d'accessibilité (confort de lecture)
+    ============================================= */
+    .barre-accès {
+      background: var(--fond);
+      border-bottom: 1px solid var(--carte-bord);
+      padding: 6px 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .barre-accès::-webkit-scrollbar { display: none; }
+
+    .barre-accès-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .barre-accès-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--texte-tres-doux);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .barre-accès-groupe {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .btn-accès {
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--carte-bord);
+      background: transparent;
+      color: var(--texte-doux);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      line-height: 1.4;
+    }
+    .btn-accès:hover { background: var(--tag-fond); border-color: #c8c0b4; }
+    .btn-accès:focus-visible { outline: 3px solid var(--jaune); outline-offset: 2px; }
+    .btn-accès.actif {
+      background: var(--jaune);
+      border-color: var(--jaune);
+      color: var(--texte);
+    }
+
+    /* Mode dys : espacement étendu */
+    body.dys-actif .carte-desc,
+    body.dys-actif .carte-titre,
+    body.dys-actif .carte-tag {
+      letter-spacing: 0.05em;
+      word-spacing: 0.15em;
+      line-height: 1.8;
+    }
+
+    /* =============================================
+       Mode sombre automatique
+    ============================================= */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fond:          #1a1a1a;
+        --texte:         #f0ece4;
+        --texte-doux:    #b0a898;
+        --texte-tres-doux: #a09880;
+        --carte-fond:    #242424;
+        --carte-bord:    #333333;
+        --tag-fond:      #2e2e2e;
+        --tag-texte:     #b0a898;
+        --jaune:         #d4a820;
+        --jaune-clair:   #3d3400;
+        --jaune-tag:     #2e2500;
+      }
+
+      .header { background: #1e1e1e; }
+      #recherche { background: #2a2a2a; color: var(--texte); }
+      .barre-accès { background: #1e1e1e; }
+      .chip { background: #2a2a2a; color: #c8bfb0; border-color: #3a3a3a; }
+      .chip:hover { border-color: #d4a820; color: #f0ece4; }
+      .carte-icone { background: #3d3400; filter: brightness(1.15); }
+      .carte-lien { color: #e8b830; }
+      .carte-lien:hover { color: #f5c842; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       HEADER sticky : logo + compteur + recherche
+  ============================================= -->
+  <header class="header" role="banner">
+    <div class="header-inner">
+      <div class="logo-bloc">
+        <span class="logo-titre">🪺 WikiPerché</span>
+        <span class="logo-sous">par La Maison Perchée</span>
+      </div>
+      <div class="compteur" id="compteur" aria-live="polite">… ressources</div>
+      <div class="recherche-wrap">
+        <input
+          type="search"
+          id="recherche"
+          class="recherche"
+          placeholder="Rechercher une ressource…"
+          aria-label="Rechercher parmi les ressources WikiPerché"
+        >
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================
+       BARRE D'ACCESSIBILITÉ : taille de police + espacement
+  ============================================= -->
+  <div class="barre-accès" role="region" aria-label="Confort de lecture">
+    <div class="barre-accès-inner">
+      <span class="barre-accès-label">Confort de lecture&nbsp;:</span>
+      <div class="barre-accès-groupe" role="group" aria-label="Taille de police">
+        <button class="btn-accès" id="btn-police-moins" aria-label="Réduire la taille du texte">A−</button>
+        <button class="btn-accès actif" id="btn-police-normal" aria-label="Taille de texte normale">A</button>
+        <button class="btn-accès" id="btn-police-plus" aria-label="Agrandir la taille du texte">A+</button>
+      </div>
+      <button class="btn-accès" id="btn-espacement" aria-pressed="false" aria-label="Activer le mode espacement pour la dyslexie">⇔ Espacement</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       FILTRES : section / type / trouble
+  ============================================= -->
+  <nav class="filtres-zone" aria-label="Filtres par section, type et trouble">
+
+    <!-- Niveau 1 : filtre par section -->
+    <div class="chips-barre" role="group" aria-label="Filtrer par section" id="filtres-sections"></div>
+
+    <!-- Niveau 2 : filtre par type de contenu -->
+    <div class="chips-barre" role="group" aria-label="Filtrer par type de contenu" id="filtres-types">
+      <span class="filtre-label" aria-hidden="true">Type&nbsp;:</span>
+    </div>
+
+    <!-- Niveau 3 : filtre par trouble -->
+    <div class="chips-barre" role="group" aria-label="Filtrer par trouble" id="filtres-troubles">
+      <span class="filtre-label" aria-hidden="true">Trouble&nbsp;:</span>
+    </div>
+
+  </nav>
+
+  <div class="filtres-diviseur" aria-hidden="true"></div>
+
+  <!-- ============================================
+       GRILLE DE CARTES
+  ============================================= -->
+  <main class="grille-wrapper" id="main-contenu">
+    <div class="grille" id="grille" role="list" aria-label="Ressources WikiPerché"></div>
+  </main>
+
+  <!-- ============================================
+       DONNÉES
+  ============================================= -->
+  <script>
+  const data = [{ "cat": "vivre", "label": "🌱 Vivre avec", "items": [{ "icon": "📖", "title": "Bibliographie très complète sur la schizophrénie", "desc": "Plus d’une vingtaine de références de livres sur la schizophrénie écrits par des personnes concernées et/ou des professionnels de santé", "tags": ["Article / Livre", "Schizophrénie"], "link": "https://promesses-sz.fr/2016-05-04-11-14-31/litterature-et-schizophrenies.html" }, { "icon": "🎬", "title": "Vivre avec … une dépression", "desc": "Courte vidéo explicative sous forme de dessins et de témoignage. Aide à déconstruire les clichés et idées reçues sur cette maladie.", "tags": ["Vidéo / Film", "Dépression"], "link": "https://www.youtube.com/watch?v=TOU0dagYveo&t=3s" }, { "icon": "📖", "title": "Accompagnement de l’handicap à Science-Po", "desc": "Ouvrage de référence pour approfondir pour le quotidien.", "tags": ["Article / Livre"], "link": "https://www.sciencespo.fr/enseignants/fr/accompagnements/handicap.html" }, { "icon": "🌐", "title": "Narcotiques Anonymes", "desc": "sur le même fonctionnement que les Alcooliques Anonymes.  Pour aider à se sortir ensemble de la dépendance aux drogues", "tags": ["Site internet / Blog", "Addictions"], "link": "https://www.narcotiquesanonymes.org/" }, { "icon": "🌐", "title": "Drogues info Services : LE site à consulter en priorité", "desc": "Site ressources très complet : comprendre les addictions, témoignages, évaluer, trouver de l’aide, ligne d’écoute 7j/7", "tags": ["Site internet / Blog", "Addictions"], "link": "https://www.drogues-info-service.fr/" }, { "icon": "🎙️", "title": "Les troubles bipolaires: 40 millions de personnes concernées dans le monde", "desc": "Comment améliorer le diagnostic ? Quelles prises en charge existent pour les patients ? par le Dr Marc Masson, psychiatre à Paris", "tags": ["Podcast", "Bipolarité"], "link": "https://www.rfi.fr/fr/podcasts/priorit%C3%A9-sant%C3%A9/20230117-les-troubles-bipolaires-40-millions-de-personnes-concern%C3%A9es-dans-le-monde" }, { "icon": "🎬", "title": "Dépression et sérotonine : on s’est trompé ? par le Dr Guillaume Fond", "desc": "Contenu vidéo informatif et pédagogique sur dépression pour le quotidien.", "tags": ["Vidéo / Film", "Dépression"], "link": "https://www.youtube.com/watch?v=Rb2IfYGVRNA" }, { "icon": "🎬", "title": "Je suis mon pire ennemi” documentaire sur les troubles psychiques dans la série “les yeux d’Olivier”", "desc": "Contenu vidéo pour découvrir et comprendre sur les troubles psychiques pour le quotidien.", "tags": ["Vidéo / Film", "Bipolarité", "Dépression"], "link": "https://www.jeremydriessen.be/je-suis-mon-pire-ennemi-documentaire-sur-les-troubles-psychiques/" }, { "icon": "🌐", "title": "Troubles psychiques : lignes d’écoute pour trouver de l’aide", "desc": "SUPER UTILE : les lignes d’écoute pour les personnes concernées et aussi leurs familles pour parler de dépression, bipolarité et de schizophrénie", "tags": ["Site internet / Blog", "Bipolarité", "Dépression"], "link": "https://loptimisme.com/troubles-psychiques-lignes-decoute/" }, { "icon": "🎬", "title": "Mental : série télé (épisode de 20 min)", "desc": "On découvre le parcours de jeunes atteints de différents troubles psychologiques lors de leur séjour en clinique. Un parler vrai et surtout une approche des troubles psys vus et vécus de l’intérieur.", "tags": ["Vidéo / Film", "Addictions", "Bipolarité"], "link": "https://www.france.tv/slash/mental/" }, { "icon": "🌐", "title": "Donner la vie et être concernée par les troubles bipolaires", "desc": "Plateforme en ligne de ressources sur bipolarité pour le quotidien.", "tags": ["Site internet / Blog", "Bipolarité"], "link": "https://www.madmoizelle.com/les-forceps-pas-question-je-pousse-comme-une-dingue-elise-raconte-son-accouchement-1391469" }, { "icon": "🌐", "title": "Comme des fous", "desc": "Plateforme en ligne de ressources sur les troubles psychiques pour le quotidien.", "tags": ["Site internet / Blog", "Bipolarité", "Schizophrénie"], "link": "https://commedesfous.com/" }, { "icon": "🎬", "title": "Comment aider quelqu’un qui souffre de dépression ? par le Dr Christophe André", "desc": "Contenu vidéo informatif et pédagogique sur les troubles psychiques pour le quotidien.", "tags": ["Vidéo / Film", "Anxiété/Angoisse", "Dépression"], "link": "https://www.youtube.com/watch?v=tVrQ0t8nPx8" }, { "icon": "📖", "title": "La force des différents, Sophie Cluzel", "desc": "Ressource documentée pour approfondir pour le quotidien.", "tags": ["Article / Livre"], "link": "https://informations.handicap.fr/a-la-force-des-differents-sophie-cluzel-publie-livre-32153.php" }, { "icon": "🌐", "title": "Addictions et troubles psychiques : quels liens ?", "desc": "Article court avec les caractéristiques clés des addictions et des liens pour trouver de l’aide", "tags": ["Site internet / Blog", "Addictions"], "link": "https://www.ceapsy-idf.org/addictions-troubles-psychiques-quels-liens" }, { "icon": "🌐", "title": "Solidarités Usagers Psy", "desc": "Liste de blogs créés par des personnes concernées par la maladie psychique. Une bonne façon de trouver entraide et compréhension.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://www.solidarites-usagerspsy.fr/divers/t%C3%A9moignages/blogs-et-sites-d-usagers/" }, { "icon": "🌐", "title": "Addictions : Du plaisir à la dépendance", "desc": "Article très complet de l’Inserm pour comprendre les addictions", "tags": ["Site internet / Blog", "Addictions"], "link": "https://www.inserm.fr/dossier/addictions/" }, { "icon": "📲", "title": "Voyageuse au naturel", "desc": "Abigaïl, 26 ans raconte comment elle “cohabite” avec son trouble borderline. Elle raconte aussi ses voyages à travers le monde.", "tags": ["Réseaux sociaux", "Borderline / TPL"], "link": "https://www.instagram.com/voyageuse_au_naturel/" }, { "icon": "🌐", "title": "Droit Pluriel", "desc": "Association qui s’engage pour une justice accessible aux personnes en situation de handicap", "tags": ["Site internet / Blog"], "link": "https://droitpluriel.fr/" }, { "icon": "📖", "title": "Comment survivre en hôpital psychiatrique (en fumant des tonnes de cigarettes) de Laetitia Bocquet, Editions Kiwi", "desc": "une BD écrite et dessinée par une adolescente de 17 ans qui décrit son hospitalisation. Humour garanti.", "tags": ["Article / Livre"] }, { "icon": "🌐", "title": "Club House", "desc": "Un Clubhouse est un lieu d’entraide et d’activité de jour, non médicalisé.\nLa gestion de ces lieux innovants est effectuée intégralement par les \nmembres eux-mêmes (personnes vivant avec un trouble psychique), en coopération avec les équipes salariées, dans un esprit de bienveillance et sans jugement\n.", "tags": ["Site internet / Blog", "Bipolarité", "Schizophrénie"], "link": "https://www.clubhousefrance.org/" }, { "icon": "📖", "title": "Le trouble borderline expliqué aux proches\" du Dr Déborah Ducasse et Véronique Brand-Arpon", "desc": "Ce livre est une consultation entre une famille et un médecin psychiatre spécialisé dans le trouble de la personnalité borderline. Il vous enseignera l’état des connaissances actuelles et vous permettra d’acquérir les compétences psychologiques pour aider la personne de votre entourage hypersensible aux interactions relationnelles et mieux communiquer avec elle.", "tags": ["Article / Livre", "Borderline / TPL"] }, { "icon": "🌐", "title": "Etre mère et concernée par les troubles bipolaires", "desc": "Plateforme en ligne de ressources sur bipolarité pour le quotidien.", "tags": ["Site internet / Blog", "Bipolarité"], "link": "https://www.madmoizelle.com/trouble-bipolaire-et-maternite-je-partais-avec-lidee-que-je-serais-une-mauvaise-mere-1115621" }, { "icon": "📖", "title": "La dépression : en savoir plus pour en sortir", "desc": "Document TRES complet sur la dépression : repérer les symptômes, connaitre les traitements, savoir a qui s’adresser, le rôle de l’entourage", "tags": ["Article / Livre", "Dépression"] }, { "icon": "🌐", "title": "Fil santé Jeunes : site d’informations sur la santé mentale, l’amour, la sexualité pour les jeunes de 12 à 25 ans et une ligne d’écoute : 0 800 235 236", "desc": "Site internet / Blog sur addictions, anxiété/angoisse, bipolarité, borderline / tpl, dépression, schizophrénie", "tags": ["Site internet / Blog", "Addictions", "Anxiété/Angoisse"], "link": "https://www.filsantejeunes.com/" }, { "icon": "🎬", "title": "Bipolaire : comprendre, apprendre et vivre avec", "desc": "Extrait de l’émission “ça commence aujourd’hui”. Témoignage et point de vue du conjoint", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www.youtube.com/watch?v=j5t1oN4EcH0" }, { "icon": "🌐", "title": "“La santé mentale : Je peux en parler”, programme pour les étudiants", "desc": "Programme de formation et d'accompagnement pour le quotidien.", "tags": ["Site internet / Blog"], "link": "https://www.jepeuxenparler.fr" }, { "icon": "📖", "title": "Goupil ou face, bande dessinée de Lou Lubie", "desc": "Après des années de questionnements, Lou découvre qu'elle est atteinte de http://www.goupil-ou-face.fr/cyclothymie.html : un trouble de l’humeur de la famille des maladies bipolaires.\nUn ouvrage de vulgarisation scientifique qui se nourrit de l’expérience personnelle de l’autrice pour dresser le portrait plein d’humour et de sensibilité d’un trouble psychiatrique encore largement méconnu.", "tags": ["Article / Livre", "Bipolarité"], "link": "http://www.goupil-ou-face.fr/bd.html" }, { "icon": "🌐", "title": "Santé psy (Suisse francophone)", "desc": "Le plein d’informations pour les personnes concernées, les proches, les jeunes. Site très bien fait avec de nombreuses ressources en ligne mais aussi localement (pour les frontaliers)", "tags": ["Site internet / Blog", "Anxiété/Angoisse", "Bipolarité"], "link": "https://www.santepsy.ch/fr/" }, { "icon": "🌐", "title": "Ceapsy : Le Centre Ressource Ile de France pour les personnes concernées \npar les troubles psychiques, pour leurs proches et pour les \nprofessionnels", "desc": "Organise des permanences d’information et d’orientation en visio et par téléphone. Que faire en situation d’urgence ? Travailler et se former ; se loger ; avoir une vie sociale ….", "tags": ["Site internet / Blog", "Anxiété/Angoisse", "Bipolarité"], "link": "https://www.ceapsy-idf.org/vous-etes-une-proche" }, { "icon": "🌐", "title": "Interview du Dr Philippe Nuss, psychiatre : la schizophrénie", "desc": "Explications claires sur la schizophrénie, la difficulté de poser un diagnostic, les similitudes avec les troubles bipolaires, et l’importance d’intégrer les Proches dans le parcours de soins", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=GO4qi36yUX0" }, { "icon": "📖", "title": "Comment mieux accompagner les troubles psychotiques", "desc": "Document très bien fait édité par Premiers Secours en Santé Mentale", "tags": ["Article / Livre", "Bipolarité", "Schizophrénie"], "link": "https://pssmfrance.fr/wp-content/uploads/2023/01/Carnet-TROUBLES-PSYCHOTIQUES.pdf" }, { "icon": "🎬", "title": "Idées suicidaires et tentatives de suicide", "desc": "Conférence du Dr Liova YON - Chef de service Psyline : Psy Ile-de-France & VigilanS Paris - GHU Paris psychiatrie neurosciences", "tags": ["Vidéo / Film", "Autres troubles", "Bipolarité"], "link": "https://www.youtube.com/watch?v=Jfv7UJCFd10" }, { "icon": "🌐", "title": "Mon parcours handicap", "desc": "Témoignage personnel et inspirant pour le quotidien.", "tags": ["Site internet / Blog"], "link": "https://www.monparcourshandicap.gouv.fr/" }, { "icon": "🌐", "title": "Mon Parcours Handicap", "desc": "Site de l’Etat très fourni : scolarité, études supérieures, emploi et vie professionnelle, formation professionnelle, la MDPH en ligne, aides et démarches", "tags": ["Site internet / Blog", "Bipolarité", "Borderline / TPL"], "link": "https://www.monparcourshandicap.gouv.fr/" }, { "icon": "📌", "title": "Une photographe a immortalisé sa relation complexe avec sa mère bipolaire", "desc": "Ressource utile et accessible sur bipolarité pour le quotidien.", "tags": ["Autre", "Bipolarité"], "link": "https://arts.konbini.com/photo/une-photographe-a-immortalise-sa-relation-complexe-avec-sa-mere-bipolaire/?fbclid=IwAR3gGcskI2dJXIUNPsRpeiyID3rlyCpOmwBa_LOQDEDc6kIYNleEdO1NxEg" }, { "icon": "🎬", "title": "“Qu’est-ce qu’on va faire de Jacques ?” film de Marie Garel-Weiss - 2022", "desc": "À la mort de leur père, Louise, Fabien et Estelle se retrouvent démunis face à leur frère, Jacques, atteint de troubles schizophréniques qu'ils doivent désormais prendre à leur charge. Pour Louise, l'expérience va se révéler décisive.", "tags": ["Vidéo / Film", "Schizophrénie"] }, { "icon": "🌐", "title": "TPL familles / Connexions familiales", "desc": "le plein d’infos sur les troubles borderline ou troubles de la personnalité limite TPL ; Les conseils donnés aux familles confrontées au refus de soin d’un proche", "tags": ["Site internet / Blog", "Borderline / TPL"], "link": "https://tpl-familles.org/" }, { "icon": "🎬", "title": "Le soleil de trop près (film sorti le 28/09/2022) disponible en DVD", "desc": "\"Le Soleil de trop près\" offre une immersion saisissante dans la vie de Basile, un trentenaire atteint de schizophrénie sur le chemin tortueux du rétablissement. Une relation très sensible entre un frère et une soeur.", "tags": ["Vidéo / Film", "Schizophrénie"] }, { "icon": "📖", "title": "Dans ma tête de bipolaire de François Lejeune", "desc": "Un récit haletant qui embarque le lecteur entre tempête et lumière ; un récit de vie authentique", "tags": ["Article / Livre", "Bipolarité"] }, { "icon": "📖", "title": "Bipolaire, un message d’espoir de Yann Layma, Editions Le lys Bleu", "desc": "Yann photographe de métier nous décrit son vécu intérieur : les crises maniaques, les phases de dépression mais aussi le déni, la souffrance intérieure, la générosité de l’entourage, la solidarité des pairs et la découverte de la psychoéducation.", "tags": ["Article / Livre", "Bipolarité"] }, { "icon": "🎬", "title": "Que faire quand on ne répond pas aux antidépresseurs ? par le Dr Guillaume Fond", "desc": "Contenu vidéo informatif et pédagogique sur dépression pour le quotidien.", "tags": ["Vidéo / Film", "Dépression"], "link": "https://www.youtube.com/watch?v=Kt6LE2cDCSM" }, { "icon": "🌐", "title": "Addiction : 5 lignes d’écoute pour en parler", "desc": "SUPER UTILE pour trouver du soutien pour les personnes concernées et leur entourage", "tags": ["Site internet / Blog", "Addictions"], "link": "https://loptimisme.com/addiction-5-lignes-decoute-pour-en-parler/" }, { "icon": "🌐", "title": "Fondation Santé des Etudiants", "desc": "LE site à connaître pour trouver un établissement de soins-études à partir de la 3ème-2nde jusqu’aux études supérieures", "tags": ["Site internet / Blog"], "link": "http://www.fsef.net/" }, { "icon": "🌐", "title": "Les Funambules (Paris)", "desc": "Les Funambules est un service de prévention et d’accompagnement dédié aux jeunes de 7 à 25 ans dont un proche (parent, frère ou sœur) souffre de troubles psychiatriques", "tags": ["Site internet / Blog", "Bipolarité", "Borderline / TPL"], "link": "https://falret.org/services-etablissements/etablissements-services-les-funambules/" }, { "icon": "🎬", "title": "Bipolarité : à quoi ressemble leur quotidien ?", "desc": "Emission TV “ça commence aujourd’hui” présentée par Faustine. Témoignages de personnes concernées par la maladie", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www.youtube.com/watch?v=l8nmYMwd4FU" }, { "icon": "🌐", "title": "Santé Psy Jeunes", "desc": "Site spécialement destiné pour les jeunes avec 4 rubriques : j’ai besoin d’aide, je m’inquiète pour quelqu’un, repérer/agir tôt, où consulter", "tags": ["Site internet / Blog", "Anxiété/Angoisse", "Bipolarité"], "link": "https://www.santepsyjeunes.fr/" }, { "icon": "🌐", "title": "Cité de la Santé (à la Villette / Paris)", "desc": "La Cité de la Santé est un lieu de ressources où il est possible de rencontrer, y compris le weekend, un professionnel de santé, un patient expert, un écoutant bénévole …", "tags": ["Site internet / Blog", "Addictions", "Anxiété/Angoisse"], "link": "https://www.cite-sciences.fr/fr/au-programme/lieux-ressources/cite-de-la-sante/" }, { "icon": "🌐", "title": "Plan de Crise Conjoint", "desc": "Le PCC est une forme récente de déclaration anticipée permettant de prévenir et de mieux gérer une éventuelle future crise en considérant les préférences des usagers en matière de soins et de traitements. Il est établi conjointement avec la personne concernée qui exprime à l’avance ses besoins en cas de crise.", "tags": ["Site internet / Blog", "Bipolarité", "Borderline / TPL"], "link": "https://plandecriseconjoint.ch/" }] }, { "cat": "retablissement", "label": "✨ Vers le rétablissement", "items": [{ "icon": "🎤", "title": "La dépression résistante : comment la soigner ?", "desc": "Conférence d'expert accessible sur dépression, dans une perspective de rétablissement.", "tags": ["Conférence", "Dépression"], "link": "https://www.youtube.com/watch?v=YIvTJsDzudI" }, { "icon": "📖", "title": "Les voix du rétablissement de Sabrina Palumbo", "desc": "Témoignages de 5 personnes concernées par la maladie psychique. Des parcours différents vers un même objectif : le rétablissement", "tags": ["Article / Livre", "Bipolarité", "Schizophrénie"] }, { "icon": "🌐", "title": "Blog en Bande dessinée sur la schizophrénie", "desc": "Récit illustré accessible et touchant sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "http://tagueuleboris.com/index.php/pourquoi-ce-blog/" }, { "icon": "🌐", "title": "Collectif schizophrénies : premier portail sur la schizophrénie", "desc": "Structure d'accompagnement et de soutien sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://www.collectif-schizophrenies.com/" }, { "icon": "🌐", "title": "Psycom : un site de ressources sur la santé mentale", "desc": "Psycom, une ressource publique nationale,pour que la santé mentale devienne l'affaire de toutes et de tous", "tags": ["Site internet / Blog"], "link": "https://www.psycom.org/" }, { "icon": "🌐", "title": "Ma boussole Aidants", "desc": "Un site de ressources très complet avec une recherche d’après votre localisation", "tags": ["Site internet / Blog"], "link": "https://www.maboussoleaidants.fr/" }, { "icon": "🌐", "title": "Le mensuel des équipes soignantes en psychiatrie", "desc": "Plateforme en ligne de ressources, dans une perspective de rétablissement.", "tags": ["Site internet / Blog"], "link": "https://www.santementale.fr/" }, { "icon": "📱", "title": "e-Bref", "desc": "information claire, actualisée, compréhensible et porteuse d'espoir concernant les troubles psychiques, les traitements, l'organisation des soins, les aides disponibles… +  identification des ressources pour les aidants près de chez vous", "tags": ["Applis", "Bipolarité", "Borderline / TPL"], "link": "https://www.fondation-fondamental.org/ebref-une-application-smartphone-dediee-laccompagnement-des-familles" }, { "icon": "🎬", "title": "La dépression dans les troubles bipolaires ; conférence du Dr Vincent HENNION, Psychiatre,", "desc": "Intervention d'expert accessible et pédagogique sur bipolarité, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www.youtube.com/watch?v=kEeBs4SRBNc" }, { "icon": "🎬", "title": "Portrait de Maxime Perez Zitvogel, co-fondateur de la Maison Perchée", "desc": "Ouvrage de référence pour approfondir sur bipolarité, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www.lespatientssengagent.fr/maxime-perez-zitvogel-co-fondateur-de-la-maison-perchee" }, { "icon": "📖", "title": "Mieux vivre avec le trouble borderline de Catherine Musa", "desc": "Ouvrage de référence pour approfondir sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Borderline / TPL"] }, { "icon": "🌐", "title": "Les consultations Jeunes Consommateurs (12-25ans)", "desc": "Des consultations pour les jeunes mais aussi leur entourage ; trouver de l’aide près de chez soi", "tags": ["Site internet / Blog", "Addictions"], "link": "https://www.drogues-info-service.fr/Tout-savoir-sur-les-drogues/Se-faire-aider/Les-Consultations-jeunes-consommateurs-CJC-une-aide-aux-jeunes-et-a-leur-entourage" }, { "icon": "📌", "title": "Dépression et inflammation : le rôle émergent du système immunitaire en psychiatrie", "desc": "Ressource utile et accessible sur dépression, dans une perspective de rétablissement.", "tags": ["Autre", "Dépression"], "link": "https://theconversation.com/depression-et-inflammation-le-role-emergent-du-systeme-immunitaire-en-psychiatrie-171459?utm_term=Autofeed&utm_medium=Social&utm_source=Facebook&fbclid=IwAR1xUf0p5gb5wAJhZIIKtf_jSMf4WRVh3Vz-O5y4cR9vwy_RflIwjoPDEAs#Echobox=1639726025" }, { "icon": "🌐", "title": "PromesseS", "desc": "Association pour les Proches de personnes concernées par la schizophrénie. Propose régulièrement des conférences en ligne et un programme de randonnées itinérantes en petit groupe.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://www.promesses-sz.fr/" }, { "icon": "📖", "title": "Ils sont patients experts", "desc": "Ressource documentée pour approfondir, dans une perspective de rétablissement.", "tags": ["Article / Livre"], "link": "https://www.femina.fr/article/ils-sont-patients-experts?fbclid=IwAR2khGPOPBSoC46ebivTwEGOLjbkrLVf64YXfsvADyya2HJmZhWLQAoh_gc" }, { "icon": "🎬", "title": "Norvège : la psychiatrie sans médicament ; Reims, centre de jour Antonin Artaud : une autre approche du soin ; Ecodair : l’expérience professionnelle adaptée", "desc": "Structure d'accompagnement et de soutien, dans une perspective de rétablissement.", "tags": ["Vidéo / Film"], "link": "https://www.francetvinfo.fr/replay-magazine/france-2/nous-les-europeens/nous-les-europeens-du-vendredi-9-septembre-2022_5333581.html" }, { "icon": "🎙️", "title": "Troubles bipolaires : le désespoir des patients, l’espoir des médecins", "desc": "UN excellent podcast qui met en lumière les dernières avancées médicales en termes de dépistage ; intervention d’ Argos 2001, association pour les personnes concernées et leurs familles", "tags": ["Podcast", "Bipolarité"], "link": "https://www.radiofrance.fr/franceinter/podcasts/interception/interception-du-dimanche-02-avril-2023-2554440?fbclid=IwAR0Z2lSCKVZNccCW0ECpv0qc5qjAcYFyoxGycyxGM2FERdWHN3oXbsH2d_0" }, { "icon": "🎬", "title": "Des voix dans ma tête. Témoignage d’Eleanor Longden", "desc": "Eleanor explique comment elle a appris à composer avec ses voix intérieures et leur sens.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.ted.com/talks/eleanor_longden_the_voices_in_my_head?language=fr&subtitle=fr" }, { "icon": "🌐", "title": "Open dialogue : formations pour le personnel médical", "desc": "Programme de formation et d'accompagnement, dans une perspective de rétablissement.", "tags": ["Site internet / Blog"], "link": "https://u-p-asso.fr/fr/formations" }, { "icon": "🎬", "title": "L'importance de la famille dans le chemin vers le rétablissement.", "desc": "Vidéo de Florent Babillote, concerné par la schizophrénie, père de famille, aide-soignant et coach", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=RXVA8uQGVhQ" }, { "icon": "📖", "title": "Les troubles bipolaires, complexes et diagnostiqués trop tardivement", "desc": "Ressource documentée pour approfondir sur bipolarité, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité"], "link": "https://www.fondation-fondamental.org/les-maladies-mentales/les-troubles-bipolaires" }, { "icon": "🎬", "title": "Vivre avec un trouble bipolaire", "desc": "Emission TV “Les questions santé” présentée par Marina Carrère d’Encausse avec un psychiatre et une personne bipolaire", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www.youtube.com/watch?v=_mo_G-J03q4" }, { "icon": "🌐", "title": "Association francophone des médiateurs de santé-pairs", "desc": "Le but de l’AFMSP est de former, informer, conseiller, communiquer et de sensibiliser tous les publics professionnels travaillant dans les secteurs publics, privés, associatifs ou autres ; ou non professionnels aux savoirs expérientiels, aux parcours de rétablissements des usagers en santé mentale, et plus particulièrement au savoir ainsi qu' à l’expérience des MSP.", "tags": ["Site internet / Blog"], "link": "https://www.afmsp.fr/" }, { "icon": "🎬", "title": "Borderline : \"j'étais dans l'autodestruction pour exister\"", "desc": "Contenu vidéo informatif et pédagogique sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=L-CHOpv_bRM" }, { "icon": "🎤", "title": "La réhabilitation psychosociale orientée rétablissement : du concept à l’appropriation par les professionnels de secteur, quels enjeux ?", "desc": "Conférence du Dr Bralet, accessible à tous, du C3RP, centre de réhabilitation psychosociale en  Ile de France. Elle aborde la place de la pair-aidance en milieu hospitalier.", "tags": ["Conférence"], "link": "https://c3rp.fr/la-rehabilitation-psychosociale-orientee-retablissement/" }, { "icon": "🌐", "title": "Profamille", "desc": "Programme très complet de psychoeducation pour les Proches qui apporte plein d’informations sur la schizophrénie et aide à communiquer avec son proche et à gérer son propre stress", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://profamille.site/34-2/" }, { "icon": "🎤", "title": "La réhabilitation en pratique par le Dr Nicolas Rainteau", "desc": "Une autre approche humaniste de la réhabilitation qui place le patient au centre. A voir absolument !", "tags": ["Conférence", "Schizophrénie"], "link": "https://schizinfo.com/eventbrite-event/rehabilitation-en-pratique/" }, { "icon": "🌐", "title": "Mieux communiquer avec son proche bipolaire", "desc": "Formation de 2 jours dispensée par l’UNAFAM. Se renseigner auprès de votre délégation régionale.", "tags": ["Site internet / Blog", "Bipolarité"], "link": "https://www.unafam.org/sites/default/files/fichiers-joints/10-2019/D%C3%A9pliant%20formation%20mieux%20communiquer%20avec%20son%20proche%20bipolaire%202018.pdf" }, { "icon": "🌐", "title": "Nightline", "desc": "site très complet sur la santé mentale par et pour les étudiants. Ergonomie du site parfaitement adapté pour les étudiants. Plein de ressources.", "tags": ["Site internet / Blog"], "link": "https://www.nightline.fr/" }, { "icon": "🎤", "title": "Psychonutrition : Bien manger pour aller mieux", "desc": "Conférence donnée par le Dr Guillaume Fond, le Dr Christophe André et organisée par le magazine Cerveau & Psycho", "tags": ["Conférence", "Bipolarité", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=dsZSrrg6Rcw" }, { "icon": "🎬", "title": "La schizophrénie, les raisons de l'espoir ! Dr Guillaume Fond et Florent Babillotte", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://youtu.be/6EF41m-ao8o" }, { "icon": "🎬", "title": "Schizophrénie expliqué par Psykocouac", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=NWqhPcIpGqg" }, { "icon": "📖", "title": "Troubles bipolaires : de l'euphorie à la dépression", "desc": "Ouvrage de référence pour approfondir sur bipolarité, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité"], "link": "https://www.allodocteurs.fr/maladies-psychiatrie-bipolarite-maniaco-depressif-troubles-bipolaires-de-l-euphorie-a-la-depression-151.html" }, { "icon": "🌐", "title": "Connexions familiales", "desc": "Programme de psychoéducation en ligne pour les proches aidants de personnes borderline ou TPL", "tags": ["Site internet / Blog", "Borderline / TPL"], "link": "https://tpl-familles.org/nos-actions-la-psychoeducation-tpl-borderline/" }, { "icon": "🎬", "title": "Microbiote et troubles bipolaires", "desc": "Quel lien entre microbiote et troubles bipolaires ? Présentation de Guillaume Fond", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www.youtube.com/watch?v=3jZjTlytENE" }, { "icon": "🎬", "title": "Le témoignage plein d’espoir d’Elyn Saks, schizophrène et rétablie", "desc": "Témoignage personnel et inspirant sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=f6CILJA110Y" }, { "icon": "📖", "title": "Quand la vulnérabilité devient une force", "desc": "Ressource documentée pour approfondir, dans une perspective de rétablissement.", "tags": ["Article / Livre"], "link": "https://www.psychologie.ch/fr/quand-la-vulnerabilite-devient-une-force" }, { "icon": "📌", "title": "La Tête Haute : Baptiste et l'alcoolisme.", "desc": "Ressource utile et accessible sur addictions, dans une perspective de rétablissement.", "tags": ["Autre", "Addictions"], "link": "https://fb.watch/auNrhqQA19/" }, { "icon": "📱", "title": "Troubles bipolaires : une application pour un meilleur suivi", "desc": "Application mobile pratique et utile sur bipolarité, dans une perspective de rétablissement.", "tags": ["Applis", "Bipolarité"], "link": "https://www.allodocteurs.fr/passeport-bp-un-parcours-de-soins-adapte-aux-personnes-souffrant-de-troubles-bipolaires-32452.html" }, { "icon": "📖", "title": "Cerveau et Psycho Mars 2022", "desc": "Ressource documentée pour approfondir sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Borderline / TPL"] }, { "icon": "🌐", "title": "Open dialogue formation", "desc": "Programme de formation et d'accompagnement sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "http://www.odformation.org/" }, { "icon": "📖", "title": "Médicaments : des effets secondaires parfois trop lourds.", "desc": "Ressource documentée pour approfondir, dans une perspective de rétablissement.", "tags": ["Article / Livre"], "link": "https://www.allodocteurs.fr/medicaments-des-effets-secondaires-parfois-trop-lourds-32226.html?fbclid=IwAR067E4gCJmmFGqbsZ3OVEe1649jTz7YvG5SU0dl3xOAhXBRWXG10lwFbq4" }, { "icon": "📖", "title": "Maman a dit “Bande de nuls !” livre co-écrit par Céline Leutellier et son fils Killian", "desc": "Ce livre, « c’est notre vie, un témoignage à deux voix et quatre mains », celles de Killian, un enfant né avec des troubles autistiques et schizophréniques, « enfermé dans une prison de peurs et d’angoisses », et celles de Céline, sa mère, qui refuse tous les traitements médicaux car elle ne croit qu’en « un seul remède : l’amour ». Les propos tenus sur les traitements médicamenteux n’engagent que leurs auteurs.", "tags": ["Article / Livre", "Autres troubles", "Schizophrénie"], "link": "https://bandedenuls.com/" }, { "icon": "🌐", "title": "Des proches, la famille et le rétablissement", "desc": "Plateforme en ligne de ressources, dans une perspective de rétablissement.", "tags": ["Site internet / Blog"], "link": "http://blog.douglas.qc.ca/recovery/2013/03/19/les-proches-la-famille-et-le-retablissement/" }, { "icon": "📖", "title": "Déséquilibre du microbiote intestinal et pathologies psychiatriques", "desc": "Article / Livre sur bipolarité, borderline / tpl, dépression, schizophrénie", "tags": ["Article / Livre", "Bipolarité", "Borderline / TPL"], "link": "https://www.troubles-bipolaires.com/desequilibre-du-microbiote-intestinal-et-pathologies-psychiatriques/?fbclid=IwAR2IeYC6QY8CD1PM6AvZMA_HKgloiJz8gRy2cNYSHzYu701gQ1XW8HkpG64" }, { "icon": "📖", "title": "Trouble Bipolaire : 17 illustrations magnifiques sur cette maladie méconnue", "desc": "Ressource documentée pour approfondir sur bipolarité, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité"], "link": "https://hitek.fr/42/trouble-bipolaire-dessins-maladie-mentale-troubles-mentaix-art-sofia-roman-emotions-croquis_10158" }, { "icon": "🌐", "title": "Argos 2001", "desc": "Association d’aide aux personnes atteintes de troubles bipolaires et à leur entourage, créée en 2001. Ses activités essentielles consistent dans des groupes de paroles pour les patients et leurs proches ainsi que des conférences faites par des psychiatres spécialisés sur les troubles bipolaires.", "tags": ["Site internet / Blog", "Bipolarité"], "link": "https://argos2001.net/" }, { "icon": "🎬", "title": "La schizophrénie expliquée en 4 minutes par le Pr Llorca", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=QkpUkbFlHy8" }, { "icon": "📖", "title": "La psychoéducation pour les personnes concernées et leurs familles", "desc": "Article très complet sur tous les programmes de psychoéducation : comment et où en bénéficier", "tags": ["Article / Livre", "Bipolarité", "Schizophrénie"], "link": "https://www.collectif-schizophrenies.com/les-prises-en-charges/la-psycho-education-des-proches" }, { "icon": "🎬", "title": "Elles ont dû faire interner leur enfant", "desc": "Emission TV. Témoignages de mamans qui ont dû prendre la très difficile décision d’une hospitalisation sous contrainte.", "tags": ["Vidéo / Film", "Bipolarité", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=3Z3x2AVvntA" }, { "icon": "🎬", "title": "Le rétablissement : un changement de paradigme", "desc": "Présenté par le Dr Aurélie Tinland. Un peu plus technique que les autres vidéos mais accessible et très complet", "tags": ["Vidéo / Film"], "link": "https://www.youtube.com/watch?v=lz1mhyNIIzE" }, { "icon": "🌐", "title": "Des formations pour soutenir l’entourage familial", "desc": "L’Unafam propose à l’entourage familial (mères et pères, conjoints, sœurs et frères, filles et fils), vous les aidants, une offre de formation gratuite, riche et variée, à suivre en fonction de vos attentes personnelles : \n• En présentiel, près de chez vous\n• En ligne, sur la plateforme http://www.formaidants.fr/", "tags": ["Site internet / Blog", "Bipolarité", "Borderline / TPL"], "link": "https://www.unafam.org/nos-actions/formations/des-formations-pour-soutenir-lentourage-familial" }, { "icon": "🎬", "title": "Après l’hiver : une histoire vécue sur le traitement de la schizophrénie", "desc": "Ouvrage de référence pour approfondir sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=vdW0Zft8Rso" }, { "icon": "🎤", "title": "Le processus de rétablissement présenté par un médecin et une médiatrice de santé pair", "desc": "Excellente vidéo dans laquelle le processus de rétablissement et ses différentes étapes sont très bien expliquées", "tags": ["Conférence"], "link": "https://www.youtube.com/watch?v=ODriOIDOEK4" }, { "icon": "🌐", "title": "Les entendeurs de voix", "desc": "Site à découvrir absolument Objectif de l’assos : promouvoir une approche des voix et des autres perceptions, expériences ou vécus inhabituels, respectueuse des personnes et de leur expertise. Un site de précieuses ressources aussi bien pour les personnes concernées que pour leurs Proches.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://revfrance.org/presentation/" }, { "icon": "🌐", "title": "Société québécoise de la schizophrénie", "desc": "Site ressources très complet : témoignages, informations sur la maladie, programme de psychoéducation en ligne, conférences", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://www.schizophrenie.qc.ca/fr/" }, { "icon": "🌐", "title": "Schizo Espoir dans le Haut Rhin", "desc": "Plateforme en ligne de ressources sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://www.schizoespoir.com/" }, { "icon": "📖", "title": "La voix intérieure : Guide pratique à l'usage (et au sujet) des personnes qui entendent des voix de Paul Baker", "desc": "Un livre fort utile aussi bien pour les personnes concernées que leurs proches", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "🎬", "title": "Bien choisir son thérapeute", "desc": "Contenu vidéo informatif et pédagogique, dans une perspective de rétablissement.", "tags": ["Vidéo / Film"], "link": "https://youtu.be/fTpTK1jOf3UCoucou" }, { "icon": "🎬", "title": "Paroles de rétablissement de Patricia Deegan", "desc": "Patricia Deegan, atteinte de schizophrénie, est l’une des pionnères du rétablissement", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=LnZrybnC9JQ" }, { "icon": "📖", "title": "Des lumières sur le ciel de Bénédicte Chenu", "desc": "“Ce livre est le récit du parcours que j’ai mené avec mon fils, des rencontres qui ont été décisives, de ce que nous avons appris pour qu’il puisse enfin vivre une vie apaisée et autonome. Parce que l’on peut se rétablir de la schizophrénie, et même vivre une belle vie.”", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "🎙️", "title": "La psychose dans tous ses états", "desc": "4 podcasts de nos amis québécois : - être confronté à la psychose pour la première fois - vivre la clinique PEP (premier épisode psychotique) au quotidien - se rétablir après une psychose - l’intersection entre culture et psychose", "tags": ["Podcast", "Schizophrénie"], "link": "https://www.buzzsprout.com/2085122" }, { "icon": "🌐", "title": "Programmes d’éducation thérapeutique pour les patients et leurs familles au GHU de Paris", "desc": "Autonomie, Empowerment, Rétablissement, sont les piliers de l’Education Thérapeutique.\nDans cet objectif, l’établissement propose une offre de soins \nindividualisée sous forme d’un ensemble de programmes et d’actions d’Education Thérapeutique du Patient (ETP)", "tags": ["Site internet / Blog", "Addictions", "Bipolarité"], "link": "https://www.ghu-paris.fr/fr/les-programmes-deducation-therapeutique-du-patient-2021" }, { "icon": "🌐", "title": "L’Open dialogue pour mieux répondre aux besoins liés aux troubles psychiques", "desc": "Qu’est-ce que l’Open dialogue ? définition des principes en quelques lignes", "tags": ["Site internet / Blog", "Bipolarité", "Borderline / TPL"], "link": "https://www.santementale.fr/2022/02/lopen-dialogue-pour-mieux-repondre-aux-besoins-lies-aux-troubles-psychiques/" }, { "icon": "🌐", "title": "Vers le rétablissement par l’UNAFAM", "desc": "Article qui résume très bien ce qu’est le rétablissement avec ses 5 clés et 5 étapes. Explique la différence avec la réhabilitation psychosociale", "tags": ["Site internet / Blog"], "link": "https://www.unafam.org/troubles-et-handicap-psy/vers-le-retablissement" }, { "icon": "🎬", "title": "Gringe et Lucille veulent briser les tabous sur la schizophrénie", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=RsESzeOG2hA&t=2s" }, { "icon": "🎬", "title": "Schizophrénie : mieux accompagner les malades ?", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=y2PNA7cb0B4" }, { "icon": "🎬", "title": "Le Trouble Borderline, c'est quoi ?", "desc": "Contenu vidéo informatif et pédagogique sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=Z4CN9-rsYyI" }, { "icon": "🌐", "title": "Les troubles bipolaires (site ressources)", "desc": "Plateforme en ligne avec ressources et informations sur bipolarité, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Bipolarité"], "link": "https://www.troubles-bipolaires.com/" }, { "icon": "🎙️", "title": "7 podcasts inspirants de témoignages de personnes vivant avec un trouble psychique", "desc": "Témoignage personnel et inspirant sur les troubles psychiques, dans une perspective de rétablissement.", "tags": ["Podcast", "Bipolarité", "Dépression"], "link": "https://loptimisme.com/7-podcasts-temoignages-troubles-psychiques/" }, { "icon": "📖", "title": "L’expérience de vie fait-elle compétence? Entraide, soutien et accompagnement par les pairs.", "desc": "Ressource documentée pour approfondir, dans une perspective de rétablissement.", "tags": ["Article / Livre"], "link": "https://expairscompeten.sciencesconf.org/" }, { "icon": "🎬", "title": "Les antispychotiques : comment ça marche ?", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=pzPyJbRCnTQ" }, { "icon": "🌐", "title": "L’îlot", "desc": "Association basée en Suisse pour les proches-aidants ; beaucoup de ressources accessibles en ligne (conférences, webinaires, replays …) et un programme de psychoéducation en ligne", "tags": ["Site internet / Blog", "Bipolarité", "Dépression"], "link": "https://www.lilot.org/" }, { "icon": "🎤", "title": "Le rétablissement en psychiatrie", "desc": "Témoignage de Vincent Demassiet, concerné par la schizophrénie. Il raconte son parcours et l’aide précieuse qu’il a reçue de RevFrance pour apprivoiser ses voix", "tags": ["Conférence", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=YDh_3UeYAb4" }, { "icon": "🎬", "title": "Le  trouble schizo-affectif raconté par une personne concernée", "desc": "Contenu vidéo informatif et pédagogique sur trouble schizo-affectif, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Trouble schizo-affectif"], "link": "https://association.graap.ch/temoignage-le-trouble-schizo-affectif/" }, { "icon": "🎬", "title": "Borderline : en phase de compréhension de sa maladie", "desc": "Ouvrage de référence pour approfondir sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=jf8kAc79SXU" }, { "icon": "📖", "title": "Faire face au trouble bipolaire du Dr Jean-Pierre Guichard et Angélique Excoffier", "desc": "Ressource documentée pour approfondir sur bipolarité, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité"] }, { "icon": "🌐", "title": "La schizophrénie : une maladie très invalidante", "desc": "Plateforme en ligne de ressources sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://www.fondation-fondamental.org/les-maladies-mentales/schizophrenie/la-maladie" }, { "icon": "🎤", "title": "Les journées de la schizophrénie", "desc": "De nombreuses conférences à voir en replay sur le rétablissement, la schizophrénie, la place des proches, la communication ... Une mine d’informations !", "tags": ["Conférence", "Schizophrénie"], "link": "https://schizinfo.com/" }, { "icon": "🌐", "title": "Solidarités Usagers Psy", "desc": "Thématiques abordées : soins, logement, vie sociale, loisirs, insertion professionnelle…  L'objectif premier de Solidarités Usagers Psy est d'être avant tout « pratiquo-pratique », dans un objectif de partages (d’informations et d’expériences vécues), et donc de solidarités (d’où le nom du site). Vous trouverez ainsi sur de nombreuses pages des guides, formulaires, outils… téléchargeables, ainsi que des vidéos informatives. Site TRES complet", "tags": ["Site internet / Blog", "Bipolarité", "Borderline / TPL"], "link": "https://www.solidarites-usagerspsy.fr/" }, { "icon": "🎬", "title": "Borderline quand l'hyperémotivité est une souffrance", "desc": "Contenu vidéo informatif et pédagogique sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=zMZY6LcZLyM" }, { "icon": "📖", "title": "Accompagner le rétablissement d’une personne avec schizophrénie de Nicolas Barré", "desc": "LE livre à lire absolument : concis, facile à lire, avec plein d’exemples concrets. Toutes les étapes du rétablissement sont parfaitement décrites et expliquées.", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "🌐", "title": "Ma boussole Aidants", "desc": "Plateforme en ligne de ressources, dans une perspective de rétablissement.", "tags": ["Site internet / Blog"], "link": "https://www.maboussoleaidants.fr/" }, { "icon": "📖", "title": "Se rétablir de Lisa Mandel, un ouvrage original sous forme de bande dessinée", "desc": "Ce livre recueille avec humour les témoignages de personnes directement concernées. Qu’elles soient entendeuses de voix comme Romain, bipolaires comme Chloé ou atteintes de TDAH à l’instar de Jonathan, chacune nous prouve que nous ne sommes pas uniquement définis par nos neurodivergences, et qu’avec un accompagnement adapté, il est possible de s’en sortir.", "tags": ["Article / Livre", "Autres troubles", "Bipolarité"] }, { "icon": "🎬", "title": "Bipolarité : s’en sortir, le parcours de Marie Alvery", "desc": "Emission TV “Mille et une vies” présentée par Frédéric Lopez. Témoignage de Marie, avec un psychiatre", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www.youtube.com/watch?v=QJLZrZKHYi4" }, { "icon": "🎬", "title": "La schizophrénie, comment s'en sortir ? Témoignage de Florent Babillote", "desc": "Florent est aujourd’hui aide-soignant en hôpital psy. Il raconte avec humilité son parcours de rétablissement", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=bFk42dbEpDA" }, { "icon": "🎬", "title": "C’est quoi être schizophrène ? par Lucille Zolla présidente de LMP", "desc": "Témoignage sincère et authentique de Lucille qui déconstruit les clichés sur cette maladie", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=OWGhyloBBno" }, { "icon": "🎤", "title": "L'humeur en montagnes russes - Bipolaire ou borderline ?", "desc": "Conférence présentée par le Dr Suzane Renaud, psychiatre québécoise", "tags": ["Conférence", "Bipolarité", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=lnt_xt8VGEY" }, { "icon": "📖", "title": "Cap sur le rétablissement", "desc": "Témoignage de Luc, concerné par la schizophrénie, sur son rétablissement co-écrit avec des professionnels de santé qui apportent leur vision du rétablissement", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "📖", "title": "Maladies psychiques: le fardeau des proches aidants", "desc": "Ressource documentée pour approfondir, dans une perspective de rétablissement.", "tags": ["Article / Livre"], "link": "https://revuehemispheres.ch/maladies-psychiques-le-fardeau-des-proches-aidants/?fbclid=IwAR3KsyhFpbgQ4DAPcEg6jrGZiXwgtEtf3NqLb4X2ONJw-2ThSE1nDCI3sNc" }, { "icon": "🎬", "title": "Le rétablissement en santé mentale, c’est possible! | Kharoll-Ann", "desc": "Témoignage d’une jeune québécoise sur son parcours et son rétablissement", "tags": ["Vidéo / Film"], "link": "https://www.youtube.com/watch?v=oAFMiGsRoQk" }, { "icon": "🎬", "title": "Vivre avec la schizophrénie", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=-ihHRmWJuEI" }, { "icon": "🎤", "title": "Comment et pourquoi diminuer les antipsychotiques dans le traitement de la schizophrénie ?", "desc": "Ouvrage de référence pour approfondir sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Conférence", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=S0f9MNwDyZ8" }, { "icon": "📖", "title": "Ensemble, on aboie en silence de Gringe, parrain de LMP", "desc": "Témoignage authentique de Gringe, en tant que frère d’une personne concernée par la schizophrénie.", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "🎬", "title": "Vivre avec la schizophrénie. Emission Ca commence aujourd’hui", "desc": "Témoignage de Jason, jeune atteint de schizophrénie, qui explique son combat contre la maladie avec le soutien de sa maman et de Florent Babillote, aujourd’hui père de famille et aide-soignant en HP", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=OGJN-F6BZ8A" }, { "icon": "📖", "title": "Les 7 principes de l’Open dialogue", "desc": "Ouvrage de référence pour approfondir sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Schizophrénie"], "link": "https://u-p-asso.fr/fr/documents/nos-articles/les-7-principes-de-l-open-dialogue" }, { "icon": "🌐", "title": "Avant de craquer", "desc": "Excellent site québécois plein de ressources pour soutenir les Proches", "tags": ["Site internet / Blog"], "link": "https://www.avantdecraquer.com/" }, { "icon": "📱", "title": "Avec « Goliath », un poignant récit en réalité virtuelle sur la psychose", "desc": "Application mobile pratique et utile sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Applis", "Schizophrénie"], "link": "https://www.lemonde.fr/pixels/article/2021/12/19/avec-goliath-un-poignant-recit-en-realite-virtuelle-sur-la-psychose_6106690_4408996.html#xtor=AL-32280270-%5Bwhatsapp%5D-%5Bios%5D" }, { "icon": "🌐", "title": "Falret", "desc": "l’ŒUVRE FALRET accompagne des personnes souffrant de troubles psychiques ou en difficultés psycho-sociales.L’association met son expérience et son savoir-faire au service de différents types d’actions pour leur permettre de bénéficier d’une meilleure qualité de vie. Associant professionnels et bénévoles, l’association propose un accompagnement individualisé et dans la durée,respectueux de l’intégrité de la personne, afin de favoriser son bien-être et l’acquisition de la plus grande autonomie possible.", "tags": ["Site internet / Blog", "Anxiété/Angoisse", "Bipolarité"], "link": "https://falret.org/" }, { "icon": "📌", "title": "« Se rétablir, c’est s’éloigner du gouffre »", "desc": "Ressource utile et accessible, dans une perspective de rétablissement.", "tags": ["Autre"], "link": "https://www.santementale.fr/2021/12/se-retablir-cest-seloigner-du-gouffre/?fbclid=IwAR064pFEnnSejVHS49MdEmm-chUviPyvMkdNrPUFWaoMzRLYlQwtpxKINg8" }, { "icon": "📖", "title": "L’euthymie : le retour à la normale ?", "desc": "Ressource documentée pour approfondir sur bipolarité, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité"], "link": "https://www.passeportsante.net/fr/psychologie/Fiche.aspx?doc=euthymie-reconnaitre-retour-normale-bipolaires&fbclid=IwAR2TqxFebyjysHa4ubq0-pmx9toZFfAF5sSFaGa1493wy95pWyJcEAGMgxQ" }, { "icon": "📖", "title": "5 mots pour mieux comprendre les troubles psys", "desc": "Article / Livre sur bipolarité, borderline / tpl, dépression, schizophrénie", "tags": ["Article / Livre", "Bipolarité", "Borderline / TPL"], "link": "https://usbeketrica.com/fr/article/5-mots-pour-mieux-comprendre-les-troubles-psys" }, { "icon": "🌐", "title": "Formation en ligne pour les aidants", "desc": "Formation en ligne  a pour objectifs de se questionner et d'analyser les situations vécues dans la relation au proche malade, en situation de handicap ou de dépendance afin de trouver les réponses adéquates. L'objectif est aussi de mieux connaître et mobiliser les ressources existantes près de chez \nvous. Formation non spécifique aux handicap psychique.", "tags": ["Site internet / Blog", "Bipolarité", "Borderline / TPL"], "link": "https://formation.aidants.fr/" }, { "icon": "🎤", "title": "Trouble de la personnalité limite ou borderline", "desc": "Conférence d'expert accessible sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Conférence", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=9jjLIPo40Mk" }, { "icon": "🎙️", "title": "Je t’aime, moi non plus", "desc": "Podcast à écouter pour s'informer sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Podcast", "Borderline / TPL"], "link": "https://open.spotify.com/episode/1nzA8GzVBqrjarlV217prW?si=LAXoO3pJTBuDiEsThEL6MA&nd=1" }, { "icon": "🎬", "title": "Interview de Cecilia McGough, 3 ans après sa conférence TedEx", "desc": "Très intéressant de constater l’évolution positive de Cécilia. Uniquement sous-titrée en anglais", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=6wXCEAXfYco" }, { "icon": "🎤", "title": "Comment la formation de “Connexions familiales” vient en aide aux proches de patients atteints de TPL/ Borderline ?", "desc": "Programme de formation et d'accompagnement sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Conférence", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=s09KAyO9d44&t=1s" }, { "icon": "📖", "title": "Soyez réhab, guide pratique de réhabilitation psychosociale du Dr Nicolas Rainteau", "desc": "Guide à destination des familles, des aidants et des soignants. Ecrit avec humour et en termes clairs.", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "🌐", "title": "Mon Parcours Handicap", "desc": "Témoignage personnel et inspirant, dans une perspective de rétablissement.", "tags": ["Site internet / Blog"], "link": "https://www.service-public.fr/particuliers/actualites/A15353" }, { "icon": "🌐", "title": "Le rétablissement - Psycom", "desc": "Plateforme en ligne de ressources, dans une perspective de rétablissement.", "tags": ["Site internet / Blog"], "link": "https://www.psycom.org/comprendre/le-retablissement/" }, { "icon": "🌐", "title": "5 étapes vers le rétablissement", "desc": "Plateforme en ligne de ressources sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://schizinfo.com/se-retablir/5-etapes-vers-retablissement/" }, { "icon": "🌐", "title": "RFSM-e motion", "desc": "Programme de psychoéducation en ligne proposée par l’association suisse L’îlot", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://rfsm-e-motion.ch/e-motion/" }, { "icon": "📖", "title": "la méthode AERER pour apprendre à être attentif à la santé mentale de ses amis, collègues …", "desc": "Ouvrage de référence pour approfondir, dans une perspective de rétablissement.", "tags": ["Article / Livre"], "link": "https://mcusercontent.com/19c244451c6a39857cf89b45f/files/1e2dfe9c-2d8f-fa36-40c8-59724d5641ee/MarquePage.pdf" }, { "icon": "🎬", "title": "“Humeur liquide, Être(s) bipolaire” documentaire", "desc": "Contenu vidéo pour découvrir et comprendre sur bipolarité, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://youtu.be/xCb34lAKEh4" }, { "icon": "📖", "title": "Demain, j’étais folle. Un voyage en schizophrénie. de Arnhild Lauveng. Préface de Christophe André", "desc": "Dans un témoignage exceptionnel, elle raconte la perte du sentiment de soi, les hallucinations qui dévorent le quotidien, le repli et l'isolement, jusqu'à l'internement et la prise en charge médicale. Cette parole rare et sensible dit la souffrance mais aussi l'humanité qui persiste toujours, à chaque instant.", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "📖", "title": "Comment soigne-t-on les troubles bipolaires ?", "desc": "Ressource documentée pour approfondir sur bipolarité, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité"], "link": "https://www.fondation-fondamental.org/les-maladies-mentales/les-troubles-bipolaires/les-traitements" }, { "icon": "📖", "title": "Une photographe raconte ses troubles bipolaires dans des autoportraits oniriques", "desc": "Témoignage personnel et inspirant sur bipolarité, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité"], "link": "https://arts.konbini.com/amp/photo/une-photographe-raconte-ses-troubles-bipolaires-dans-des-autoportraits-oniriques/" }, { "icon": "📖", "title": "Je suis une personne, pas une maladie de Luc Vigneault", "desc": "Regards croisés très instructifs sur le rétablissement entre Luc, atteint de schizophrénie, qui témoigne sur son parcours et de nombreux professionnels de santé qui expliquent leur vision du rétablissement", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "🎬", "title": "Open dialogue : un moyen de sortir de la psychose", "desc": "Documentaire passionnant sur l’Open dialogue, méthode alternative pour apaiser les crises psychotiques sans recours systématique au traitement médicamenteux.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=7tb8ITIFOyY" }, { "icon": "🎬", "title": "Gringe raconte la schizophrénie de son petit frère", "desc": "Témoignage personnel et inspirant sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=6Cq3oDpd1RE" }, { "icon": "🎙️", "title": "Que se passe-t-il dans la tête d’un schizophrène ?", "desc": "Podcast à écouter pour s'informer sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Podcast", "Schizophrénie"], "link": "https://www.franceculture.fr/conferences/universite-de-nantes/cerveau-et-schizophrenie" }, { "icon": "🌐", "title": "Schizo Jeunes", "desc": "Association pour les Proches et les jeunes concernés par la schizophrénie. Utilise l’équithérapie en complément des soins classiques.", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://fr-fr.facebook.com/schizojeunes/" }, { "icon": "🎬", "title": "Borderline : trouble de la personnalité - Psykocouac", "desc": "Ouvrage de référence pour approfondir sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=ICSWs7PlN4g" }, { "icon": "🌐", "title": "Psy-Care, par le GHU de Paris", "desc": "Le projet PsyCARE vise à améliorer l’intervention précoce en cas de \npsychose en fournissant un nouvel ensemble d’outils faciles à diffuser \nafin :\n• De faciliter l’accès aux soins\n• D’améliorer la détection précoce\n• D’offrir des programmes thérapeutiques personnalisés", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://psy-care.fr/" }, { "icon": "📖", "title": "Comment des schizophrènes réussissent-ils à composer avec les voix qu'ils entendent", "desc": "Ressource documentée pour approfondir sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Schizophrénie"], "link": "http://www.psychomedia.qc.ca/sante-mentale/2014-05-09/entendre-des-voix-adaptation" }, { "icon": "📖", "title": "Comment faire accepter son traitement au malade du Dr Xavier Amador", "desc": "Un livre très utile quand on se heurte au refus d’une personne atteinte de schizophrénie de prendre un traitement. De très nombreuses pistes pour apprendre à communiquer avec son proche malade.", "tags": ["Article / Livre", "Schizophrénie"] }, { "icon": "🎬", "title": "Inflammation et troubles bipolaires, causes, conséquences et stratégies thérapeutiques", "desc": "Conférence du Pr Marion LEBOYER, psychiatre, consultation d’immuno-psychiatrie à l'hôpital Albert Chenevier Créteil,  directrice de la Fondation FondaMental.\net le Dr Ryad TAMOUZA, Immunologiste, consultation d’immuno-psychiatrie à l'hôpital Albert Chenevier Créteil,", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www.youtube.com/watch?v=lbYxTrtTjxE" }, { "icon": "🌐", "title": "Mademoiselle Laure, chansons bipolaires et alors !", "desc": "Plateforme en ligne de ressources sur bipolarité, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Bipolarité"], "link": "https://m.youtube.com/channel/UC9hCgBd6sI46ftnAV9W77UA" }, { "icon": "🎬", "title": "Microbiote et schizophrénie", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://m.youtube.com/watch?v=cAAXHuOmjDg&feature=share" }, { "icon": "🎬", "title": "Microbiote et santé mentale : tout savoir sur la psycho-nutrition", "desc": "Interview du Dr Guillaume Fond : l’impact de l’alimentation sur la santé mentale via le microbiote", "tags": ["Vidéo / Film"], "link": "https://www.moka.care/blog/microbiote-et-sante-mentale-tout-savoir-sur-la-psycho-nutrition" }, { "icon": "🎬", "title": "Peut-on guérir de la schizophrénie ? Puis-je arrêter les antipsychotiques ? par le Dr Guillaume Fond", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=O0A1ej_8RVg" }, { "icon": "🌐", "title": "“J’ai été schizophrène”", "desc": "Le témoignage de Frédéric Meuwly, “ex-schizophrène”, “guéri” grâce à une approche thérapeutique basée sur le corps. A découvrir avec curiosité", "tags": ["Site internet / Blog", "Schizophrénie"], "link": "https://blogs.letemps.ch/caroline-bernard/2021/01/25/jai-ete-schizophrene/" }, { "icon": "🎬", "title": "Maxime et sa mère parlent de la bipolarité", "desc": "Maxime, co-fondateur de La Maison Perchée témoigne sur sa bipolarité ainsi que sa mère. Regards croisés sur une même expérience de vie.", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://youtu.be/9j_i5jm_mwE" }, { "icon": "🎬", "title": "Le témoignage de Cecilia McGough, étudiante américaine schizophrène", "desc": "Elle a fait de sa maladie une force et a créé une association pour les étudiants atteints de schizophrénie. un magnifique témoignage de courage et d’espoir.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=xbagFzcyNiM" }, { "icon": "🌐", "title": "Addict’aide : pour ne plus être seul(e) face à l’addiction", "desc": "Un site excellent pour : évaluer une addiction, trouver de l’aide près de chez soi, échanger sur le forum avec des pair-aidants", "tags": ["Site internet / Blog", "Addictions"], "link": "https://www.addictaide.fr/" }, { "icon": "🎙️", "title": "Troubles bipolaires : comment les détecter ?", "desc": "par Bruno Etain\n, psychiatre à l’Hôpital Lariboisière à Paris et coordinateur des centres experts bipolaires de la Fondation FondaMental.", "tags": ["Podcast", "Bipolarité"], "link": "https://www.fondation-fondamental.org/troubles-bipolaires-comment-les-detecter" }, { "icon": "🎬", "title": "Trouble de la personnalité limite", "desc": "Présentation bien faite et complète par l’association québécoise La boussole (!)", "tags": ["Vidéo / Film", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=tC7_kWjp964" }, { "icon": "📖", "title": "La crise maniaque : peut-on éviter les urgences et rester chez soi ?", "desc": "Ressource documentée pour approfondir sur bipolarité, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité"], "link": "https://commedesfous.com/la-crise-maniaque-peut-on-eviter-les-urgences-et-rester-chez-soi/?fbclid=IwAR2qfgd6R3OPxC7vbMsX9RJIH_Ub0hHcbLQGNwsmF5gs4wMBNXB_4mlj3cg" }, { "icon": "🎬", "title": "“Tout pour être heureux” film documentaire de Jérôme Adam : vécus des familles sur les addictions d’un proche", "desc": "Contenu vidéo pour découvrir et comprendre sur addictions, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Addictions"], "link": "https://www.toutpouretreheureux.film/origine-du-film/" }, { "icon": "🎬", "title": "3 conseils pour gérer la dépression par le Dr Christophe André", "desc": "Guide pratique avec conseils concrets sur dépression, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Dépression"], "link": "https://www.youtube.com/watch?v=R6wjZpZkNPQ" }, { "icon": "📖", "title": "Léo", "desc": "Ressource documentée pour approfondir sur les troubles psychiques, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Bipolarité", "Borderline / TPL"], "link": "https://www.collectif-schizophrenies.com/la-schizophrenie/le-programme-leo" }, { "icon": "📊", "title": "Le trouble bipolaire : infographie", "desc": "Ressource utile et accessible sur bipolarité, dans une perspective de rétablissement.", "tags": ["Infographie", "Bipolarité"] }, { "icon": "🎬", "title": "🧠 Trouble de la personnalité BORDERLINE ou LIMITE", "desc": "Contenu vidéo informatif et pédagogique sur borderline / tpl, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Borderline / TPL"], "link": "https://www.youtube.com/watch?v=TRsETS7loLc" }, { "icon": "📖", "title": "Tomber 7 fois, se relever 8 de Philippe Labro", "desc": "La dépression nerveuse: ça peut tomber sur nimporte qui, même sur un homme au sommet de la réussite.\nPhilippe Labro revient de l'enfer. Il le dit. Il dit surtout qu'on peut en sortir, que tout le monde peut remonter la pente.", "tags": ["Article / Livre", "Dépression"] }, { "icon": "🌐", "title": "Premiers Secours en Santé Mentale", "desc": "Propose des formations en PSSM aux particuliers et en entreprises. Edite des carnets très complets et bien faits sur différents sujets : comment mieux accompagner le trouble dépressif, le trouble psychotique, idées et comportements suicidaires, les attaques de panique", "tags": ["Site internet / Blog", "Autres troubles", "Dépression"], "link": "https://pssmfrance.fr/" }, { "icon": "📖", "title": "Rétablissement", "desc": "Ressource documentée pour approfondir, dans une perspective de rétablissement.", "tags": ["Article / Livre"], "link": "https://centre-ressource-rehabilitation.org/-retablissement-" }, { "icon": "🎬", "title": "Irréelle réalité, la schizophrénie, un super pouvoir ? | Nathan Hofstetter", "desc": "Témoignage de Nathan, cinéaste suisse réalisateur du film documentaire Loulou", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=Ce6ABfeVrsI" }, { "icon": "🎬", "title": "La schizophrénie : sans espoir ?", "desc": "Contenu vidéo informatif et pédagogique sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Schizophrénie"], "link": "https://www.youtube.com/watch?v=3Zjk9BLEb7o" }, { "icon": "🌐", "title": "Qu’est-ce que la réhabilitation psychosociale ?", "desc": "Plateforme en ligne de ressources, dans une perspective de rétablissement.", "tags": ["Site internet / Blog"], "link": "https://centre-ressource-rehabilitation.org/qu-est-ce-que-la-rehabilitation-psychosociale" }, { "icon": "📖", "title": "Soigner la schizophrénie", "desc": "Ressource documentée pour approfondir sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Article / Livre", "Schizophrénie"], "link": "https://www.fondation-fondamental.org/les-maladies-mentales/schizophrenie/les-traitements" }, { "icon": "🌐", "title": "Ma famille de ouf", "desc": "Ouvrage de référence pour approfondir sur les troubles psychiques, dans une perspective de rétablissement.", "tags": ["Site internet / Blog", "Bipolarité", "Schizophrénie"], "link": "https://mafamilledeouf.com/a-propos/" }, { "icon": "🎬", "title": "Mon quotidien en tant que bipolaire", "desc": "Contenu vidéo informatif et pédagogique sur bipolarité, dans une perspective de rétablissement.", "tags": ["Vidéo / Film", "Bipolarité"], "link": "https://www-konbini-com.cdn.ampproject.org/c/s/www.konbini.com/fr/amp/partners/video-speech-mon-quotidien-en-tant-que-bipolaire/" }, { "icon": "🌐", "title": "Vincent Girard : une autre vision de la psychiatrie et de la prise en charge des patients", "desc": "Plateforme en ligne de ressources, dans une perspective de rétablissement.", "tags": ["Site internet / Blog"], "link": "https://blogs.letemps.ch/caroline-bernard/2022/04/26/vincent-girard-un-psychiatre-sen-va-t-en-paix/" }, { "icon": "🎙️", "title": "Schizophrénie : vivre avec", "desc": "Podcast à écouter pour s'informer sur schizophrénie, dans une perspective de rétablissement.", "tags": ["Podcast", "Schizophrénie"], "link": "https://www.franceculture.fr/emissions/le-magazine-de-la-redaction/schizophrenie-vivre-avec-0" }] }, { "cat": "societe", "label": "🤝 Maladie psy & société", "items": [{ "icon": "🌐", "title": "Handicap invisible en entreprise : en parler, c'est avancer", "desc": "Plateforme en ligne de ressources.", "tags": ["Site internet / Blog"], "link": "https://www.caf.fr/allocataires/vies-de-famille/vivre-avec-un-handicap/emploi-et-handicap/handicap-invisible-en-entreprise-en-parler-c-est-avancer" }, { "icon": "📖", "title": "Sophie Cluzel et Alexandre Jollien : \"Comment entrer dans la confiance quand on vous rappelle tous les jours votre différence ?\"", "desc": "Service d'écoute et de soutien accessible.", "tags": ["Article / Livre"], "link": "https://madame.lefigaro.fr/societe/sophie-cluzel-et-alexandre-jollien-comment-entrer-dans-la-confiance-quand-on-vous-rappelle-tous-les-jours-votre-difference-070122-210172" }, { "icon": "📌", "title": "Sur TikTok, l’auto-diagnostic des ados inquiète les psys", "desc": "Comment la déferlante d’autodiagnostic peu sérieux sur la santé mentale des jeunes complique sérieusement le travail des thérapeutes professionnels", "tags": ["Autre"], "link": "https://www.madmoizelle.com/sur-tiktok-lauto-diagnostic-des-ados-inquiete-les-psys-1226808" }, { "icon": "🌐", "title": "Avocats, droits et psychiatrie", "desc": "Association d’avocats. Soutien et informations sur les droits des patients (hospitalisation sous contrainte, isolement …)", "tags": ["Site internet / Blog"], "link": "https://www.avocatsdroitspsychiatrie.fr/" }, { "icon": "📖", "title": "Innovation en Santé mentale pour améliorer le parcours de soins", "desc": "Ouvrage de référence pour approfondir.", "tags": ["Article / Livre"], "link": "https://www.santementale.fr/2022/01/innovation-en-sante-mentale-cinq-laureats-pour-ameliorer-le-parcours-de-soins/" }, { "icon": "📖", "title": "Cap sur 2031 : consulter sans pression chez le psy du futur.", "desc": "Ressource documentée pour approfondir.", "tags": ["Article / Livre"], "link": "https://usbeketrica.com/fr/article/cap-sur-2031-prendre-rendez-vous-chez-le-psy-du-futur?fbclid=IwAR2NW7FROGeGGxzBBpW5MP4MHGBJ8f0dzw7KU1Wz3qziXpJFEBuRojccqjs" }, { "icon": "🎬", "title": "“La Forêt de mon père” de Vero Cratzborn / 2020", "desc": "Gina, 15 ans, grandit dans une famille aimante en lisière de forêt. Elle admire son père Jimmy, imprévisible et fantasque, dont elle est prête à pardonner tous les excès. Jusqu’au jour où la situation devient intenable : Jimmy bascule et le fragile équilibre familial est rompu. Dans l’incompréhension et la révolte, Gina s’allie avec un adolescent de son quartier pour sauver son père.", "tags": ["Vidéo / Film"], "link": "https://www.youtube.com/watch?v=MKHbcJo-7Uc&ab_channel=PrestigeTrailers" }, { "icon": "📖", "title": "Santé mentale : en parler pour mieux la soigner", "desc": "Ressource documentée pour approfondir.", "tags": ["Article / Livre"], "link": "https://blog.alan.com/bien-etre-au-travail/sante-mentale-en-parler-pour-mieux-la-soigner?utm_campaign=11%2F10%20%E2%80%94%20Nurturing%20Alan%20Check-Up%2721&utm_medium=email&_hsmi=183467286&_hsenc=p2ANqtz--2m_X5YFeC4iucEP9Urnqag81X1bT9Jon4AGczF_xylLCxZ597jiE9nRr49jtdr5FouLErALPcxpovV7jTsd483XikmA&utm_content=183467286&utm_source=hs_email" }, { "icon": "🌐", "title": "3114 : ligne d’écoute de prévention du suicide, destinée à la fois aux personnes concernées mais aussi aux proches", "desc": "Service d'écoute et de soutien accessible sur dépression.", "tags": ["Site internet / Blog", "Dépression"], "link": "https://3114.fr/" }, { "icon": "📖", "title": "Troubles mentaux : quand la stigmatisation d’aujourd’hui reflète les conceptions d’hier", "desc": "Article retraçant l’histoire de la psychiatrie et son impact sur les représentations dans la société", "tags": ["Article / Livre"], "link": "https://theconversation.com/troubles-mentaux-quand-la-stigmatisation-daujourdhui-reflete-les-conceptions-dhier-192540" }, { "icon": "🌐", "title": "Les troubles psychiques : des clés pour mieux comprendre", "desc": "Plateforme en ligne de ressources sur les troubles psychiques.", "tags": ["Site internet / Blog", "Bipolarité", "Schizophrénie"], "link": "https://www.unafam.org/actualites/un-nouveau-module-de-formation-en-ligne-sur-les-troubles-psychiques" }, { "icon": "📖", "title": "Pourquoi la santé mentale est-elle encore si taboue en France ?", "desc": "Ressource documentée pour approfondir.", "tags": ["Article / Livre"], "link": "https://usbeketrica.com/fr/article/pourquoi-la-sante-mentale-est-elle-encore-si-taboue-en-france" }, { "icon": "🎙️", "title": "La contention : une réalité dans le soin / vécus racontés par les soignés et les soignants", "desc": "Podcast à écouter pour s'informer.", "tags": ["Podcast"], "link": "https://chaire-philo.fr/la-contention-une-realite-dans-le-soin-vecus-soignes-et-soignants/" }, { "icon": "🎬", "title": "La web série qui déconstruit les idées reçues sur les troubles de la santé mentale", "desc": "Témoignages forts de jeunes adultes sur les troubles de santé mentale", "tags": ["Vidéo / Film", "Autres troubles", "Bipolarité"], "link": "https://www.rtbf.be/article/normal-la-web-serie-qui-deconstruit-les-idees-recues-sur-les-troubles-de-la-sante-mentale-marion-jaumotte-10882075?fbclid=IwAR1eT95TjZlI0zhQs8Kd_bfLDivqvFfU7usN8R3ZdBn_9kwCFUPHaLqDrLM&id=10882075" }, { "icon": "📖", "title": "Un guide de bonnes pratiques pour les premiers gestes", "desc": "Guide pratique avec conseils concrets.", "tags": ["Article / Livre"], "link": "https://www.liberation.fr/societe/sante/sante-mentale-un-guide-de-bonnes-pratiques-pour-les-premiers-gestes-20220125_O4DCB6AP7ZFXHI6UH7LNWEZGWY/?fbclid=IwAR11HfPJSeLZXhcNjjjPphDqlAtncuo7Ii5_wsv2pu4pLjIz_8QdG7Na8AE" }, { "icon": "🌐", "title": "4 idées fausses qui banalisent les troubles psychiques: que dire si vous les entendez ?", "desc": "Site internet / Blog sur anxiété/angoisse, bipolarité, dépression, schizophrénie", "tags": ["Site internet / Blog", "Anxiété/Angoisse", "Bipolarité"], "link": "https://loptimisme.com/idees-fausses-banalisation/" }, { "icon": "🎙️", "title": "Addictions et santé mentale avec le Dr Jean-Victor Blanc", "desc": "Comment agissent les addictions ? Quels sont les liens entre la pop culture et les addictions ? Un entretien pour déconstruire les mythes sur les addictions", "tags": ["Podcast", "Addictions"], "link": "https://musae-tomorrow.com/podcast/" }, { "icon": "🎙️", "title": "Franchir le pas de la honte par le Dr David Masson", "desc": "Podcast à écouter pour s'informer.", "tags": ["Podcast"], "link": "https://placedessciences.fr/nos-podcasts/les-maux-bleus/s01e17/?fbclid=IwAR29VY6ARMxlkTxTsx3DQpoAi7_DTS1SlZ_4ptvn4b7_MSK6ZgFLpBXFtk8" }, { "icon": "📖", "title": "En finir avec les idées fausses sur la psychiatrie et la santé mentale par le Dr Astrid Chevance", "desc": "Un excellent ouvrage accessible à tous pour déconstruire les clichés sur la psychiatrie, les maladies psychiatriques et les malades. A partager et à offrir sans modération", "tags": ["Article / Livre", "Anxiété/Angoisse", "Bipolarité"], "link": "https://editionsatelier.com/boutique/accueil/333-en-finir-avec-les-idees-fausses-sur-la-psychiatrie-et-la-sante-mentale--9782708245709.html" }, { "icon": "📲", "title": "Normalisons le regard sur les personnes handicapées", "desc": "Ressource utile et accessible.", "tags": ["Réseaux sociaux"], "link": "https://fb.watch/9RHTDAswHd/" }, { "icon": "📖", "title": "Famille et handicap : le vibrant plaidoyer de Clara Dupont-Monod contre la bureaucratie", "desc": "Ressource documentée pour approfondir.", "tags": ["Article / Livre"], "link": "https://www.franceinter.fr/culture/famille-et-handicap-le-vibrant-plaidoyer-de-clara-dupont-monod-contre-la-bureaucratie?fbclid=IwAR0dQjB-d5VYe2rgl7UdH5fPcF8Ay84TZO3X1n58nsmMmQJEOwTiNbvYQko" }, { "icon": "📖", "title": "“Folie et créativité, une histoire de famille” présentation du livre du psychiatre Raphaël Gaillard par Bénédicte Chenu", "desc": "Ouvrage de référence pour approfondir.", "tags": ["Article / Livre"], "link": "https://www.collectif-schizophrenies.com/les-temoignages/folie-et-creativite-une-histoire-de-famille-2" }, { "icon": "📖", "title": "10 artistes (Stromae, Adèle, Sia …) se sont confié sur leur santé mentale", "desc": "Ressource documentée pour approfondir.", "tags": ["Article / Livre"], "link": "https://www.iheartradio.ca/energie/energie-montreal/nouvelles/10-artistes-qui-se-sont-confies-sur-leur-sante-mentale-1.16985543?fbclid=IwAR010878MvXrypiRPJh77eG5FavAXutRxsjYyIlCsofijA1ikHRA7dmE_mw" }, { "icon": "🎬", "title": "10 idées reçues sur la dépression par le Pr Lejoyeux", "desc": "Contenu vidéo informatif et pédagogique sur dépression.", "tags": ["Vidéo / Film", "Dépression"], "link": "https://www.youtube.com/watch?v=c5pdfoTTF3M" }, { "icon": "📖", "title": "Les troubles psychiques sont toujours stigmatisés", "desc": "Ressource documentée pour approfondir sur les troubles psychiques.", "tags": ["Article / Livre", "Bipolarité", "Dépression"], "link": "https://www.neonmag.fr/depression-schizophrenie-bipolarite-les-troubles-psychiques-sont-toujours-stigmatises-556863.html?fbclid=IwAR1mO1GQ-c7UoTzN43YM6fgImwcgD40m9iCmVlofyJyOQhsIBWMV1ha5ZVk" }, { "icon": "📖", "title": "Santé mentale : mobiliser tous les acteurs de terrain par Le Dr Franck Bellivier", "desc": "Ressource documentée pour approfondir.", "tags": ["Article / Livre"], "link": "https://www.institutmontaigne.org/blog/sante-mentale-mobiliser-tous-les-acteurs-de-terrain?amp" }, { "icon": "🌐", "title": "Je veux en parler", "desc": "Un site spécialement dédié pour les jeunes qui ne savent pas comment mettre des mots sur leur souffrance psychique", "tags": ["Site internet / Blog"], "link": "https://www.jepeuxenparler.fr/" }, { "icon": "📌", "title": "Psychiatrie : il faut la faire changer ! par le Dr Nicolas Rainteau", "desc": "Pour une vision ambitieuse de la psychiatrie avec pour centre le patient et pas seulement sa maladie", "tags": ["Autre"], "link": "https://www.youtube.com/watch?v=4rxeK9v7vn4" }, { "icon": "🎙️", "title": "Par peur des discriminations, 60% des personnes handicapées ne le précisent pas sur leur CV", "desc": "Podcast à écouter pour s'informer.", "tags": ["Podcast"], "link": "https://www.europe1.fr/economie/par-peur-des-discriminations-60-des-personnes-handicapees-ne-le-precisent-pas-sur-leur-cv-4077042?fbclid=IwAR1i6gUuPiAVh5Q9X38Kj9sm9F2Kr-9yf-oWdk3rupZl96ax8Z_2kP6mcFQ" }, { "icon": "📊", "title": "La santé mentale en France", "desc": "Ressource utile et accessible.", "tags": ["Infographie"] }] }]
+  </script>
+
+  <!-- ============================================
+       APPLICATION
+  ============================================= -->
+  <script>
+    /* ---- Ordre d'affichage des filtres ---- */
+    const ORDRE_TYPES = [
+      "Vidéo / Film", "Site internet / Blog", "Article / Livre",
+      "Podcast", "Conférence", "Applis", "Réseaux sociaux", "Infographie", "Autre"
+    ];
+    const ORDRE_TROUBLES = [
+      "Bipolarité", "Schizophrénie", "Dépression", "Borderline / TPL",
+      "Anxiété/Angoisse", "Addictions", "Autres troubles", "Trouble schizo-affectif"
+    ];
+
+    /* ---- État de l'application ---- */
+    let catActive = "tout";       // section courante
+    let typeActif = null;         // chip type sélectionnée (ou null)
+    let troubleActif = null;      // chip trouble sélectionné (ou null)
+    let recherche = "";           // terme de recherche courant
+
+    /* ---- Références DOM ---- */
+    const grille          = document.getElementById("grille");
+    const compteur        = document.getElementById("compteur");
+    const inputRecherche  = document.getElementById("recherche");
+    const zoneSections    = document.getElementById("filtres-sections");
+    const zoneTypes       = document.getElementById("filtres-types");
+    const zoneTroubles    = document.getElementById("filtres-troubles");
+
+    /* =============================================
+       Construit tous les éléments de la liste plate
+    ============================================= */
+    function tousLesItems() {
+      const items = [];
+      data.forEach(section => {
+        section.items.forEach(item => {
+          items.push({ ...item, cat: section.cat, labelSection: section.label });
+        });
+      });
+      return items;
+    }
+
+    /* =============================================
+       Filtre les items selon l'état courant
+    ============================================= */
+    function itemsFiltres() {
+      const terme = recherche.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return tousLesItems().filter(item => {
+        /* filtre section */
+        if (catActive !== "tout" && item.cat !== catActive) return false;
+        /* filtre type (tags[0]) */
+        if (typeActif && item.tags[0] !== typeActif) return false;
+        /* filtre trouble (tags[1] ou tags[2]) */
+        if (troubleActif && !item.tags.slice(1).includes(troubleActif)) return false;
+        /* filtre recherche */
+        if (terme) {
+          const haystack = (item.title + " " + item.desc + " " + item.tags.join(" "))
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+          if (!haystack.includes(terme)) return false;
+        }
+        return true;
+      });
+    }
+
+    /* =============================================
+       Rendu des cartes
+    ============================================= */
+    function rendreCarte(item) {
+      const div = document.createElement("article");
+      div.className = "carte";
+      div.setAttribute("role", "listitem");
+
+      /* Corps : icône + titre + desc */
+      const corps = document.createElement("div");
+      corps.className = "carte-corps";
+
+      const icone = document.createElement("div");
+      icone.className = "carte-icone";
+      icone.setAttribute("aria-hidden", "true");
+      icone.textContent = item.icon || "📌";
+
+      const contenu = document.createElement("div");
+      contenu.className = "carte-contenu";
+
+      const titre = document.createElement("h3");
+      titre.className = "carte-titre";
+      titre.textContent = item.title;
+
+      const desc = document.createElement("p");
+      desc.className = "carte-desc";
+      desc.textContent = item.desc;
+
+      contenu.appendChild(titre);
+      contenu.appendChild(desc);
+      corps.appendChild(icone);
+      corps.appendChild(contenu);
+      div.appendChild(corps);
+
+      /* Tags */
+      if (item.tags && item.tags.length > 0) {
+        const tagsZone = document.createElement("div");
+        tagsZone.className = "carte-tags";
+        item.tags.forEach(t => {
+          const pill = document.createElement("span");
+          pill.className = "carte-tag";
+          pill.textContent = t;
+          tagsZone.appendChild(pill);
+        });
+        div.appendChild(tagsZone);
+      }
+
+      /* Lien (si présent) */
+      if (item.link) {
+        const lienBloc = document.createElement("div");
+        lienBloc.className = "carte-lien-bloc";
+        const lien = document.createElement("a");
+        lien.className = "carte-lien";
+        lien.href = item.link;
+        lien.target = "_blank";
+        lien.rel = "noopener noreferrer";
+        lien.textContent = "Voir la ressource →";
+        lienBloc.appendChild(lien);
+        div.appendChild(lienBloc);
+      }
+
+      return div;
+    }
+
+    /* =============================================
+       Met à jour la grille et le compteur
+    ============================================= */
+    function mettreAJourGrille() {
+      const items = itemsFiltres();
+      grille.innerHTML = "";
+
+      if (items.length === 0) {
+        /* État vide bienveillant */
+        const vide = document.createElement("div");
+        vide.className = "etat-vide";
+        vide.setAttribute("role", "status");
+        vide.innerHTML = `
+          <span class="etat-vide-emoji">🌿</span>
+          <p class="etat-vide-titre">Aucune ressource trouvée</p>
+          <p class="etat-vide-msg">Essaie d'élargir les filtres ou d'effacer ta recherche&nbsp;—<br>il y a forcément quelque chose pour toi ici.</p>
+        `;
+        grille.appendChild(vide);
+      } else {
+        const frag = document.createDocumentFragment();
+        items.forEach(item => frag.appendChild(rendreCarte(item)));
+        grille.appendChild(frag);
+      }
+
+      /* Mise à jour compteur */
+      const total = tousLesItems().length;
+      compteur.textContent = items.length === total
+        ? `${total} ressources`
+        : `${items.length} / ${total} ressources`;
+    }
+
+    /* =============================================
+       Construit les filtres de section (tabs)
+    ============================================= */
+    function construireFiltresSections() {
+      zoneSections.innerHTML = "";
+
+      /* Bouton "Tout" */
+      const btnTout = document.createElement("button");
+      btnTout.className = "tab-section actif";
+      btnTout.textContent = "Tout";
+      btnTout.dataset.cat = "tout";
+      btnTout.setAttribute("aria-pressed", "true");
+      zoneSections.appendChild(btnTout);
+
+      /* Un bouton par section */
+      data.forEach(section => {
+        const btn = document.createElement("button");
+        btn.className = "tab-section";
+        btn.textContent = section.label;
+        btn.dataset.cat = section.cat;
+        btn.setAttribute("aria-pressed", "false");
+        zoneSections.appendChild(btn);
+      });
+
+      /* Délégation d'événement */
+      zoneSections.addEventListener("click", e => {
+        const btn = e.target.closest(".tab-section");
+        if (!btn) return;
+        catActive = btn.dataset.cat;
+        /* Mise à jour visuelle */
+        zoneSections.querySelectorAll(".tab-section").forEach(b => {
+          b.classList.toggle("actif", b === btn);
+          b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+        });
+        mettreAJourGrille();
+      });
+    }
+
+    /* =============================================
+       Construit les chips de type de contenu
+    ============================================= */
+    function construireFiltresTypes() {
+      /* Garder le label existant */
+      const label = zoneTypes.querySelector(".filtre-label");
+      zoneTypes.innerHTML = "";
+      if (label) zoneTypes.appendChild(label);
+
+      /* Extraire les types présents dans les données */
+      const typesDansData = new Set();
+      tousLesItems().forEach(item => {
+        if (item.tags && item.tags[0]) typesDansData.add(item.tags[0]);
+      });
+
+      /* Afficher dans l'ordre défini */
+      ORDRE_TYPES.forEach(type => {
+        if (!typesDansData.has(type)) return;
+        const chip = document.createElement("button");
+        chip.className = "chip chip-type";
+        chip.textContent = type;
+        chip.dataset.type = type;
+        chip.setAttribute("aria-pressed", "false");
+        zoneTypes.appendChild(chip);
+      });
+
+      /* Délégation d'événement (toggle) */
+      zoneTypes.addEventListener("click", e => {
+        const chip = e.target.closest(".chip-type");
+        if (!chip) return;
+        if (typeActif === chip.dataset.type) {
+          /* Désactiver */
+          typeActif = null;
+          chip.classList.remove("actif");
+          chip.setAttribute("aria-pressed", "false");
+        } else {
+          /* Activer ce chip, désactiver les autres */
+          typeActif = chip.dataset.type;
+          zoneTypes.querySelectorAll(".chip-type").forEach(c => {
+            c.classList.toggle("actif", c === chip);
+            c.setAttribute("aria-pressed", c === chip ? "true" : "false");
+          });
+        }
+        mettreAJourGrille();
+      });
+    }
+
+    /* =============================================
+       Construit les chips de trouble
+    ============================================= */
+    function construireFiltresTroubles() {
+      const label = zoneTroubles.querySelector(".filtre-label");
+      zoneTroubles.innerHTML = "";
+      if (label) zoneTroubles.appendChild(label);
+
+      /* Extraire les troubles présents (tags[1] et tags[2]) */
+      const troublesDansData = new Set();
+      tousLesItems().forEach(item => {
+        if (item.tags) item.tags.slice(1).forEach(t => troublesDansData.add(t));
+      });
+
+      ORDRE_TROUBLES.forEach(trouble => {
+        if (!troublesDansData.has(trouble)) return;
+        const chip = document.createElement("button");
+        chip.className = "chip chip-trouble";
+        chip.textContent = trouble;
+        chip.dataset.trouble = trouble;
+        chip.setAttribute("aria-pressed", "false");
+        zoneTroubles.appendChild(chip);
+      });
+
+      /* Délégation d'événement (toggle) */
+      zoneTroubles.addEventListener("click", e => {
+        const chip = e.target.closest(".chip-trouble");
+        if (!chip) return;
+        if (troubleActif === chip.dataset.trouble) {
+          troubleActif = null;
+          chip.classList.remove("actif");
+          chip.setAttribute("aria-pressed", "false");
+        } else {
+          troubleActif = chip.dataset.trouble;
+          zoneTroubles.querySelectorAll(".chip-trouble").forEach(c => {
+            c.classList.toggle("actif", c === chip);
+            c.setAttribute("aria-pressed", c === chip ? "true" : "false");
+          });
+        }
+        mettreAJourGrille();
+      });
+    }
+
+    /* =============================================
+       Recherche live (debounce léger)
+    ============================================= */
+    let debounceTimer;
+    inputRecherche.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        recherche = inputRecherche.value;
+        mettreAJourGrille();
+      }, 150);
+    });
+
+    /* =============================================
+       Barre d'accessibilité : taille de police
+    ============================================= */
+    const TAILLES = { moins: "14px", normal: "16px", plus: "19px" };
+    const btnMoins  = document.getElementById("btn-police-moins");
+    const btnNormal = document.getElementById("btn-police-normal");
+    const btnPlus   = document.getElementById("btn-police-plus");
+
+    function appliquerTaille(clé) {
+      document.documentElement.style.fontSize = TAILLES[clé];
+      [btnMoins, btnNormal, btnPlus].forEach(b => b.classList.remove("actif"));
+      ({ moins: btnMoins, normal: btnNormal, plus: btnPlus })[clé].classList.add("actif");
+      localStorage.setItem("wikip-fontsize", clé);
+    }
+
+    btnMoins.addEventListener("click",  () => appliquerTaille("moins"));
+    btnNormal.addEventListener("click", () => appliquerTaille("normal"));
+    btnPlus.addEventListener("click",   () => appliquerTaille("plus"));
+
+    /* Restaurer la taille depuis localStorage */
+    const tailleStockée = localStorage.getItem("wikip-fontsize");
+    if (tailleStockée && TAILLES[tailleStockée]) appliquerTaille(tailleStockée);
+
+    /* =============================================
+       Barre d'accessibilité : espacement (mode dys)
+    ============================================= */
+    const btnEspacement = document.getElementById("btn-espacement");
+
+    function appliquerEspacement(actif) {
+      document.body.classList.toggle("dys-actif", actif);
+      btnEspacement.classList.toggle("actif", actif);
+      btnEspacement.setAttribute("aria-pressed", String(actif));
+      localStorage.setItem("wikip-spacing", actif ? "1" : "0");
+    }
+
+    btnEspacement.addEventListener("click", () => {
+      appliquerEspacement(!document.body.classList.contains("dys-actif"));
+    });
+
+    /* Restaurer l'espacement depuis localStorage */
+    if (localStorage.getItem("wikip-spacing") === "1") appliquerEspacement(true);
+
+    /* =============================================
+       Initialisation
+    ============================================= */
+    construireFiltresSections();
+    construireFiltresTypes();
+    construireFiltresTroubles();
+    mettreAJourGrille();
+
+  </script>
+</body>
+</html>
