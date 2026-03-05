@@ -433,8 +433,9 @@
     /* =============================================
        Mode sombre automatique
     ============================================= */
+    /* Thème sombre — activé par préférence système OU par choix utilisateur */
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme="light"]) {
         --fond:          #1a1a1a;
         --texte:         #f0ece4;
         --texte-doux:    #b0a898;
@@ -447,17 +448,65 @@
         --jaune-clair:   #3d3400;
         --jaune-tag:     #2e2500;
       }
-
-      .header { background: #1e1e1e; }
-      #recherche { background: #2a2a2a; color: var(--texte); }
-      .barre-accès { background: #1e1e1e; }
-      .chip { background: #2a2a2a; color: #c8bfb0; border-color: #3a3a3a; }
-      .chip:hover { border-color: #d4a820; color: #f0ece4; }
-      .carte-icone { background: #3d3400; filter: brightness(1.15); }
-      .carte-lien { color: #e8b830; }
-      .carte-lien:hover { color: #f5c842; }
+      :root:not([data-theme="light"]) .header { background: #1e1e1e; }
+      :root:not([data-theme="light"]) #recherche { background: #2a2a2a; color: var(--texte); }
+      :root:not([data-theme="light"]) .barre-accès { background: #1e1e1e; }
+      :root:not([data-theme="light"]) .chip { background: #2a2a2a; color: #c8bfb0; border-color: #3a3a3a; }
+      :root:not([data-theme="light"]) .chip:hover { border-color: #d4a820; color: #f0ece4; }
+      :root:not([data-theme="light"]) .carte-icone { background: #3d3400; filter: brightness(1.15); }
+      :root:not([data-theme="light"]) .carte-lien { color: #e8b830; }
+      :root:not([data-theme="light"]) .carte-lien:hover { color: #f5c842; }
     }
+
+    /* Override manuel : dark forcé même si système en light */
+    :root[data-theme="dark"] {
+      --fond:          #1a1a1a;
+      --texte:         #f0ece4;
+      --texte-doux:    #b0a898;
+      --texte-tres-doux: #a09880;
+      --carte-fond:    #242424;
+      --carte-bord:    #333333;
+      --tag-fond:      #2e2e2e;
+      --tag-texte:     #b0a898;
+      --jaune:         #d4a820;
+      --jaune-clair:   #3d3400;
+      --jaune-tag:     #2e2500;
+    }
+    :root[data-theme="dark"] .header { background: #1e1e1e; }
+    :root[data-theme="dark"] #recherche { background: #2a2a2a; color: var(--texte); }
+    :root[data-theme="dark"] .barre-accès { background: #1e1e1e; }
+    :root[data-theme="dark"] .chip { background: #2a2a2a; color: #c8bfb0; border-color: #3a3a3a; }
+    :root[data-theme="dark"] .chip:hover { border-color: #d4a820; color: #f0ece4; }
+    :root[data-theme="dark"] .carte-icone { background: #3d3400; filter: brightness(1.15); }
+    :root[data-theme="dark"] .carte-lien { color: #e8b830; }
+    :root[data-theme="dark"] .carte-lien:hover { color: #f5c842; }
+
+    /* Bouton toggle thème */
+    #theme-toggle {
+      background: none;
+      border: 1.5px solid var(--carte-bord);
+      border-radius: 100px;
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+      flex-shrink: 0;
+    }
+    #theme-toggle:hover { border-color: var(--jaune); }
+    #theme-toggle:focus-visible { outline: 3px solid var(--jaune); outline-offset: 2px; }
   </style>
+  <script>
+    /* Thème : appliqué avant le rendu pour éviter le flash */
+    (function() {
+      var saved = localStorage.getItem('wikip-theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
 
@@ -471,6 +520,7 @@
         <span class="logo-sous">par La Maison Perchée</span>
       </div>
       <div class="compteur" id="compteur" aria-live="polite">… ressources</div>
+      <button id="theme-toggle" aria-label="Basculer le thème" title="Basculer dark/light mode">☀️</button>
       <div class="recherche-wrap">
         <input
           type="search"
@@ -875,6 +925,35 @@
 
     /* Restaurer l'espacement depuis localStorage */
     if (localStorage.getItem("wikip-spacing") === "1") appliquerEspacement(true);
+
+    /* =============================================
+       Bouton toggle dark/light mode
+    ============================================= */
+    const THEME_KEY = 'wikip-theme';
+    const btnTheme = document.getElementById('theme-toggle');
+
+    function themeEffectif() {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved) return saved;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function appliquerTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      btnTheme.textContent = theme === 'dark' ? '☀️' : '🌙';
+      btnTheme.setAttribute('aria-label',
+        theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'
+      );
+    }
+
+    appliquerTheme(themeEffectif());
+
+    btnTheme.addEventListener('click', () => {
+      const actuel = document.documentElement.getAttribute('data-theme');
+      const nouveau = actuel === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(THEME_KEY, nouveau);
+      appliquerTheme(nouveau);
+    });
 
     /* =============================================
        Initialisation
