@@ -8473,6 +8473,17 @@ const data = [
         "link": "https://www.unafam.org"
       },
       {
+        "id": "sentinelle-des-aidants",
+        "icon": "🌐",
+        "title": "La Sentinelle des Aidants",
+        "desc": "Association de soutien par les pairs pour les proches de personnes vivant avec un trouble psychique (schizophrénie, bipolarité, trouble de la personnalité…). Groupes de parole en ligne, webinaires avec des professionnels de santé mentale, articles pratiques et une « Psychothèque » de ressources sélectionnées.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Proches aidants"
+        ],
+        "link": "https://sentinelledesaidants.fr"
+      },
+      {
         "id": "profamille-programme-proches",
         "icon": "🌐",
         "title": "Programme Profamille",
