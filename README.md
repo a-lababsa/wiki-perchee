@@ -16,7 +16,9 @@ python3 -m http.server 8000
 ## Structure du projet
 
 ```
-index.html              # Application complète (HTML + CSS + JS inline)
+index.html              # Structure HTML (header, filtres, grille, footer)
+style.css               # Styles (layout, cartes, dark mode, responsive, accessibilité)
+app.js                  # Logique applicative (filtres, rendu, favoris, crise)
 wikiperche-data.js      # Base de données des ressources
 import-resources.py     # Script d'import de nouvelles ressources
 enriched_resources.json # Données enrichies issues du collecteur (optionnel)
@@ -87,6 +89,8 @@ Le script gère automatiquement :
 - Respect de `prefers-reduced-motion`
 - Cibles tactiles ≥ 44px (WCAG 2.5.5)
 - `aria-live`, `aria-pressed`, `aria-controls` sur les éléments interactifs
+- Bandeau de crise contextuel : détecte les mots-clés de crise dans la recherche (suicide, détresse, etc.) et affiche les numéros d'urgence (3114, SOS Psychiatrie, SOS Amitié) de façon proéminente
+- Indicateurs de scroll (fade-out + flèche) sur les zones horizontales scrollables (chips, carrousel édito)
 
 ## Données
 
@@ -104,4 +108,4 @@ Chaque ressource suit ce format dans `wikiperche-data.js` :
 }
 ```
 
-Pour modifier les données, éditer `wikiperche-data.js` directement ou utiliser le script d'import. Les filtres se mettent à jour dynamiquement — seuls `ORDRE_TYPES` et `ORDRE_TROUBLES` dans `index.html` contrôlent l'ordre d'affichage des chips.
+Pour modifier les données, éditer `wikiperche-data.js` directement ou utiliser le script d'import. Les filtres se mettent à jour dynamiquement — seuls `ORDRE_TYPES` et `ORDRE_TROUBLES` dans `app.js` contrôlent l'ordre d'affichage des chips.

@@ -268,7 +268,7 @@ function rendreCarte(item) {
   } else {
     const indispo = document.createElement("span");
     indispo.className = "carte-lien-indispo";
-    indispo.textContent = "Lien bientôt disponible";
+    indispo.textContent = "À venir";
     lienBloc.appendChild(indispo);
   }
   const btnFavori = document.createElement("button");
@@ -949,15 +949,49 @@ btnRetourHaut.addEventListener("click", () => {
 (function() {
   const bandeau = document.getElementById("bandeau-crise");
   const CRISE_KEY = "wikip-crise-ferme";
+  const MOTS_CRISE = [
+    "suicide", "suicidaire", "mourir", "mourant", "en finir", "me tuer",
+    "urgence", "crise", "automutilation", "scarification",
+    "détresse", "desespoir", "désespoir", "plus envie", "mal de vivre",
+    "sos", "3114", "aide immédiate", "aide maintenant"
+  ];
   if (sessionStorage.getItem(CRISE_KEY)) {
     bandeau.style.display = "none";
     document.body.style.paddingBottom = "0";
   }
   document.getElementById("bandeau-crise-close").addEventListener("click", () => {
+    bandeau.classList.remove("crise-alerte");
     bandeau.style.display = "none";
     document.body.style.paddingBottom = "0";
     sessionStorage.setItem(CRISE_KEY, "1");
   });
+
+  /* Détection de mots-clés de crise dans la recherche */
+  function verifierCrise(terme) {
+    if (!terme) {
+      bandeau.classList.remove("crise-alerte");
+      return;
+    }
+    const t = terme.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const estCrise = MOTS_CRISE.some(mot => {
+      const m = mot.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return t.includes(m);
+    });
+    if (estCrise) {
+      bandeau.style.display = "";
+      document.body.style.paddingBottom = "";
+      bandeau.classList.add("crise-alerte");
+      sessionStorage.removeItem(CRISE_KEY);
+    } else {
+      bandeau.classList.remove("crise-alerte");
+    }
+  }
+
+  inputRecherche.addEventListener("input", () => {
+    verifierCrise(inputRecherche.value);
+  });
+  /* Vérifier aussi au chargement si un terme de crise est dans l'URL */
+  verifierCrise(inputRecherche.value);
 })();
 
 /* ---- Indicateur scroll chips ---- */
