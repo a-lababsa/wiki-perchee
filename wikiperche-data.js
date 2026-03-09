@@ -667,6 +667,50 @@ const data = [
         "link": "https://www.deboecksuperieur.com/ouvrage/9782807302747-aspergirl"
       },
       {
+        "id": "federation-francaise-sesame-autisme",
+        "icon": "🌐",
+        "title": "Fédération Française Sésame Autisme",
+        "desc": "Fédération d'associations de familles et de personnes autistes. Gère des établissements et services d'accompagnement sur tout le territoire, et propose des ressources sur les droits et le parcours de vie.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TSA / autisme"
+        ],
+        "link": "https://www.sesame-autisme.fr"
+      },
+      {
+        "id": "affa-femmes-autistes",
+        "icon": "🌐",
+        "title": "AFFA — Association francophone de femmes autistes",
+        "desc": "Association dédiée aux femmes autistes francophones. Propose des ressources sur le diagnostic tardif au féminin, des groupes de parole et des témoignages. Un espace par et pour les femmes concernées.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TSA / autisme"
+        ],
+        "link": "https://femmesautistesfrancophones.com"
+      },
+      {
+        "id": "maison-de-l-autisme",
+        "icon": "🌐",
+        "title": "Maison de l'autisme",
+        "desc": "Site officiel d'information publique sur l'autisme. Ressources fiables sur le diagnostic, l'accompagnement, les droits et les dispositifs de soutien disponibles en France.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TSA / autisme"
+        ],
+        "link": "https://maisondelautisme.gouv.fr"
+      },
+      {
+        "id": "oms-fiche-autisme",
+        "icon": "🌐",
+        "title": "OMS — Fiche d'information sur l'autisme",
+        "desc": "Fiche d'information de l'Organisation mondiale de la santé sur les troubles du spectre autistique. Données mondiales, définitions et recommandations internationales en matière de santé publique.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TSA / autisme"
+        ],
+        "link": "https://www.who.int/fr/news-room/fact-sheets/detail/autism-spectrum-disorders"
+      },
+      {
         "id": "empreintes-accompagner-le-deuil",
         "icon": "🌐",
         "title": "Empreintes — Accompagner le deuil",
