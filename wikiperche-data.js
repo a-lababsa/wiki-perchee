@@ -1106,6 +1106,192 @@ const data = [
           "Borderline / TPL"
         ],
         "link": "https://youtube.com/watch?v=tC7_kWjp964"
+      },
+      {
+        "id": "intro-video-psycare-le-stress",
+        "icon": "🎬",
+        "title": "Intro Vidéo Psycare — Le stress",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.youtube.com/watch?v=0ZR3QZeF8p8"
+      },
+      {
+        "id": "la-perche-pair-aidance-vecteur-despoir",
+        "icon": "🎙️",
+        "title": "La perche : pair-aidance, vecteur d'espoir",
+        "desc": "",
+        "type": "Podcast",
+        "troubles": [],
+        "link": "https://lnns.co/_RGuoVTxhg1"
+      },
+      {
+        "id": "troubles-anxieux-quand-la-peur-paralyse",
+        "icon": "🎙️",
+        "title": "Troubles anxieux : quand la peur paralyse",
+        "desc": "",
+        "type": "Podcast",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://lnns.co/q5u0gveMJC6"
+      },
+      {
+        "id": "les-maux-bleus-trouble-panique-agoraphobie",
+        "icon": "🎙️",
+        "title": "Les maux bleus — Jusque là, tout va bien : Trouble panique avec agoraphobie",
+        "desc": "",
+        "type": "Podcast",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://lnns.co/90C_-shTB2f"
+      },
+      {
+        "id": "lhomme-le-plus-flippe-du-monde",
+        "icon": "🎬",
+        "title": "BD/Vidéo : « L'homme le plus flippé du monde »",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.youtube.com/watch?v=m7LZoWMboFk&list=PL-CQtpSbsGq0JAEdBU-a4-L1dMKP8KOMT"
+      },
+      {
+        "id": "bd-psy-le-club-des-anxieux-qui-se-soignent",
+        "icon": "📖",
+        "title": "BD Psy « Le club des anxieux qui se soignent »",
+        "desc": "",
+        "type": "Article / Livre",
+        "troubles": ["Anxiété/Angoisse"]
+      },
+      {
+        "id": "bd-psy-la-vie-est-un-long-stress-tranquille",
+        "icon": "📖",
+        "title": "BD Psy « La vie est un long stress tranquille »",
+        "desc": "",
+        "type": "Article / Livre",
+        "troubles": ["Anxiété/Angoisse"]
+      },
+      {
+        "id": "bd-psy-les-survivants-du-burn-out",
+        "icon": "📖",
+        "title": "BD Psy « Les survivants du burn-out »",
+        "desc": "",
+        "type": "Article / Livre",
+        "troubles": ["Anxiété/Angoisse"]
+      },
+      {
+        "id": "musae-tuto-stress-anxiete-angoisse",
+        "icon": "🌐",
+        "title": "Musae Tuto : faire la différence entre le stress, l'anxiété et l'angoisse",
+        "desc": "",
+        "type": "Site internet / Blog",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://musae-tomorrow.com/2021/05/20/tuto-visualiser-ses-angoisses-pour-les-depasser/"
+      },
+      {
+        "id": "infirmiere-en-folie-langoisse-cest-aussi",
+        "icon": "📱",
+        "title": "Infirmière en folie — « L'angoisse c'est aussi… »",
+        "desc": "",
+        "type": "Réseaux sociaux",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.instagram.com/p/DIGW2OxCk2T/?img_index=1"
+      },
+      {
+        "id": "infirmiere-en-folie-differences-peur-anxiete-angoisse",
+        "icon": "📱",
+        "title": "Infirmière en folie — « Différences peur/anxiété/angoisse »",
+        "desc": "",
+        "type": "Réseaux sociaux",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.instagram.com/p/DG-UeI0CKYT/?img_index=1"
+      },
+      {
+        "id": "et-tout-le-monde-sen-fout-la-peur",
+        "icon": "🎬",
+        "title": "Et tout le monde s'en fout — La peur",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.youtube.com/watch?v=gAubNPxseL0"
+      },
+      {
+        "id": "positive-minders-vivre-avec-trouble-anxieux",
+        "icon": "🎬",
+        "title": "Positive Minders — « Vivre avec un trouble anxieux »",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.youtube.com/live/4FendE1z9kM?si=pBNbTw0gaydYsAKu"
+      },
+      {
+        "id": "brochure-maison-perchee-trouble-anxieux",
+        "icon": "📖",
+        "title": "Brochure Maison Perchée — « Mieux vivre avec un trouble anxieux »",
+        "desc": "",
+        "type": "Article / Livre",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://mpnext.cdn.prismic.io/mpnext/1d7a4b18-823a-449c-a9a5-c3e12a57ca89_Trouble+Anxieux.pdf"
+      },
+      {
+        "id": "musae-anxiete-et-phobie-sociale",
+        "icon": "🌐",
+        "title": "Musae — « Anxiété et phobie sociale »",
+        "desc": "",
+        "type": "Site internet / Blog",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://musae-tomorrow.com/2023/12/07/anxiete-et-phobie-sociale/"
+      },
+      {
+        "id": "psycom-anxiete-phobies-et-toc",
+        "icon": "🌐",
+        "title": "Psycom — « Anxiété, phobies et TOC »",
+        "desc": "",
+        "type": "Site internet / Blog",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.psycom.org/sinformer/la-sante-mentale/les-troubles-psy/anxiete-phobies-et-toc/"
+      },
+      {
+        "id": "tolerer-lanxiete-ou-vivre-avec",
+        "icon": "📱",
+        "title": "« Tolérer l'anxiété ou vivre avec ? »",
+        "desc": "",
+        "type": "Réseaux sociaux",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.instagram.com/reel/DOBtE0uDJwB/"
+      },
+      {
+        "id": "fiche-raptor-neuropsy-les-troubles-anxieux",
+        "icon": "📊",
+        "title": "Fiche Raptor Neuropsy — « Les troubles anxieux »",
+        "desc": "",
+        "type": "Infographie",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.raptorneuropsy.com/_files/ugd/ace62b_7749c464c972430b968eb37a5144afd6.pdf"
+      },
+      {
+        "id": "fiche-lanxiete-sociale",
+        "icon": "📊",
+        "title": "Fiche « L'anxiété sociale »",
+        "desc": "",
+        "type": "Infographie",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://igorthiriez.com/wp-content/uploads/2025/07/anxiete-sociale-2.pdf"
+      },
+      {
+        "id": "fiche-la-panique",
+        "icon": "📊",
+        "title": "Fiche « La panique »",
+        "desc": "",
+        "type": "Infographie",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://igorthiriez.com/wp-content/uploads/2022/01/panique-2.pdf"
+      },
+      {
+        "id": "fiche-tcc-therapies-cognitivo-comportementales",
+        "icon": "📊",
+        "title": "Fiche — Les thérapies cognitivo-comportementales (TCC)",
+        "desc": "",
+        "type": "Infographie",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.raptorneuropsy.com/_files/ugd/ace62b_a150922be2ef42939e53dd8dee746657.pdf"
       }
     ]
   },
@@ -8577,6 +8763,123 @@ const data = [
         "type": "Site internet / Blog",
         "troubles": [],
         "link": "https://www.nightline.fr/kit-de-vie/journal-de-la-gratitude"
+      },
+      {
+        "id": "directives-anticipees-psychiatrie-mon-gps",
+        "icon": "🌐",
+        "title": "Directives Anticipées en Psychiatrie — Mon GPS",
+        "desc": "",
+        "type": "Site internet / Blog",
+        "troubles": [],
+        "link": "https://www.psycom.org/agir/la-defense-des-droits/kit-mon-gps/"
+      },
+      {
+        "id": "outil-bocal-des-petites-victoires",
+        "icon": "📊",
+        "title": "Outil — Mon bocal des petites victoires",
+        "desc": "",
+        "type": "Infographie",
+        "troubles": [],
+        "link": "https://mes1001ressources.fr/wp-content/uploads/2025/12/bocal-des-victoires.pdf"
+      },
+      {
+        "id": "et-tout-le-monde-sen-fout-le-stress",
+        "icon": "🎬",
+        "title": "Et tout le monde s'en fout — Le stress",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.youtube.com/watch?v=k1ympFJR4WU"
+      },
+      {
+        "id": "psycare-comment-gerer-son-stress",
+        "icon": "🎬",
+        "title": "Psycare — « Comment gérer son stress »",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.youtube.com/watch?v=DdMyObr6N1s"
+      },
+      {
+        "id": "lancrage-fiche-igor-thiriez",
+        "icon": "📊",
+        "title": "L'ancrage — Fiche Igor Thiriez",
+        "desc": "Technique d'ancrage pour apaiser une crise d'angoisse : se reconnecter au moment présent via les 5 sens.",
+        "type": "Infographie",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://igorthiriez.com/wp-content/uploads/2015/12/ancrage-31.pdf"
+      },
+      {
+        "id": "strategies-dancrage-therapist-aid",
+        "icon": "📊",
+        "title": "Stratégies d'ancrage (en anglais)",
+        "desc": "",
+        "type": "Infographie",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.therapistaid.com/worksheets/grounding-techniques"
+      },
+      {
+        "id": "stress-management-therapist-aid",
+        "icon": "🌐",
+        "title": "Article « Stress Management » (en anglais)",
+        "desc": "",
+        "type": "Site internet / Blog",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.therapistaid.com/therapy-guide/stress-management-guide"
+      },
+      {
+        "id": "coping-skills-anxiety-therapist-aid",
+        "icon": "📊",
+        "title": "Les stratégies physiques pour gérer l'anxiété (en anglais)",
+        "desc": "",
+        "type": "Infographie",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.therapistaid.com/worksheets/coping-skills-anxiety"
+      },
+      {
+        "id": "astuce-porte-cle-gerer-anxiete",
+        "icon": "📊",
+        "title": "L'astuce « porte-clé » pour gérer l'anxiété",
+        "desc": "",
+        "type": "Infographie",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://tuaslederniermot.com/wp-content/uploads/2025/05/Outils-Porte-Cle.pdf"
+      },
+      {
+        "id": "quest-ce-que-le-stimming",
+        "icon": "🌐",
+        "title": "Qu'est-ce que le stimming ?",
+        "desc": "",
+        "type": "Site internet / Blog",
+        "troubles": ["Anxiété/Angoisse", "TSA / autisme"],
+        "link": "https://www.bloghoptoys.fr/infographie-qu-est-ce-que-le-stimming"
+      },
+      {
+        "id": "fidgets-toys-trouver-le-sien",
+        "icon": "🌐",
+        "title": "Les fidgets toys, trouver le sien",
+        "desc": "",
+        "type": "Site internet / Blog",
+        "troubles": ["Anxiété/Angoisse", "TSA / autisme"],
+        "link": "https://www.bloghoptoys.fr/fidgets-trouvez-le-votre"
+      },
+      {
+        "id": "magasin-fidget-bien-etre-autiste",
+        "icon": "🌐",
+        "title": "Magasin en ligne fidget — Bien-être autiste",
+        "desc": "",
+        "type": "Site internet / Blog",
+        "troubles": ["TSA / autisme"],
+        "link": "https://bienetreautiste.com/"
+      },
+      {
+        "id": "playlist-gerer-son-stress",
+        "icon": "🎬",
+        "title": "Playlist vidéo « Gérer son stress »",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.youtube.com/playlist?list=PLMiADgVXtc6x5LUKcgoHoNEUebAgPUxMT"
       }
     ]
   },
@@ -8986,6 +9289,24 @@ const data = [
         "type": "Site internet / Blog",
         "troubles": ["TDAH adulte", "TSA / autisme"],
         "link": "https://www.autypik.com/"
+      },
+      {
+        "id": "serie-mental-france-tv",
+        "icon": "🎬",
+        "title": "Série « Mental »",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": [],
+        "link": "https://www.france.tv/slash/mental/"
+      },
+      {
+        "id": "serie-docu-dans-ma-tete-eco-anxiete",
+        "icon": "🎬",
+        "title": "Série docu « Dans ma tête » — Vivre avec l'éco-anxiété",
+        "desc": "",
+        "type": "Vidéo / Film",
+        "troubles": ["Anxiété/Angoisse"],
+        "link": "https://www.youtube.com/watch?v=IFz5lkRlwVk"
       }
     ]
   }
