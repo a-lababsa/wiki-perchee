@@ -11,9 +11,7 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="WikiPerché — Bibliothèque de ressources sur la santé mentale">
   <meta name="twitter:description" content="Plus de 800 ressources sur la santé mentale sélectionnées par des personnes concernées. Par La Maison Perchée.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="fonts/fonts.css">
   <link rel="stylesheet" href="style.css">
   <script>
     /* Thème : appliqué avant le rendu pour éviter le flash */
@@ -92,6 +90,32 @@
   <div class="bandeau-onboarding" id="bandeau-onboarding" role="status" style="display:none;">
     <span class="bandeau-onboarding-msg"><strong>Bienvenue. Tu es au bon endroit.</strong><br>Utilise les filtres ci-dessous pour explorer par thème, ou commence par notre sélection plus bas.</span>
     <button class="bandeau-onboarding-close" id="bandeau-onboarding-close" aria-label="Fermer le message d'aide">✕</button>
+  </div>
+
+  <!-- ============================================
+       PARCOURS GUIDÉ : entrée par situation / symptôme
+  ============================================= -->
+  <div class="parcours-guide" id="parcours-guide" role="region" aria-label="Parcours guidé">
+    <div class="parcours-guide-inner">
+      <div class="parcours-etape" id="parcours-etape-1">
+        <p class="parcours-question">Comment ça va en ce moment&#8201;?</p>
+        <div class="parcours-choix" role="group" aria-label="Choisir ta situation">
+          <button class="parcours-btn" data-situation="triste">😔 Je suis triste ou en difficulté</button>
+          <button class="parcours-btn" data-situation="proche">💙 Un proche va mal</button>
+          <button class="parcours-btn" data-situation="comprendre">🔍 Je veux comprendre un trouble</button>
+          <button class="parcours-btn" data-situation="explorer">🌿 Je veux explorer les ressources</button>
+        </div>
+        <button class="parcours-skip" id="parcours-skip" aria-label="Fermer le parcours guidé">Passer</button>
+      </div>
+      <div class="parcours-etape" id="parcours-etape-2" hidden>
+        <p class="parcours-question" id="parcours-question-2"></p>
+        <div class="parcours-choix" id="parcours-choix-2" role="group" aria-label="Préciser ta situation"></div>
+        <div class="parcours-nav">
+          <button class="parcours-retour" id="parcours-retour" aria-label="Revenir à l'étape précédente">← Retour</button>
+          <button class="parcours-skip" id="parcours-skip-2" aria-label="Fermer le parcours guidé">Passer</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ============================================
@@ -186,6 +210,13 @@
   </footer>
 
   <div class="toast-favori" id="toast-favori" role="status" aria-live="polite"></div>
+
+  <!-- ============================================
+       PREVIEW MODALE (page intermédiaire de ressource)
+  ============================================= -->
+  <div class="preview-overlay" id="preview-overlay" hidden role="dialog" aria-modal="true" aria-label="Aperçu de la ressource">
+    <div class="preview-modal" id="preview-modal"></div>
+  </div>
 
   <!-- ============================================
        DONNÉES

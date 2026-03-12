@@ -44,7 +44,7 @@ const TAILLES = { moins: "14px", normal: "16px", plus: "19px" };
 
 let catActive = "tout";
 let typeActif = null;
-let troubleActif = null;
+let troublesActifs = new Set();
 let recherche = "";
 let pageActuelle = 1;
 let favoris = new Set(JSON.parse(localStorage.getItem(FAVORIS_KEY) || "[]"));
@@ -99,7 +99,7 @@ function itemsFiltres() {
     if (catActive === "favoris" && !favoris.has(item.id)) return false;
     if (catActive !== "tout" && catActive !== "favoris" && item.cat !== catActive) return false;
     if (typeActif && item.type !== typeActif) return false;
-    if (troubleActif && !item.troubles.includes(troubleActif)) return false;
+    if (troublesActifs.size > 0 && !item.troubles.some(t => troublesActifs.has(t))) return false;
     if (terme) {
       const haystack = (item.title + " " + item.desc + " " + item.type + " " + item.troubles.join(" "))
         .toLowerCase()
@@ -126,9 +126,11 @@ function mettreAJourCompteursFiltres() {
 
   zoneTroubles.querySelectorAll(".chip-trouble").forEach(chip => {
     const t = chip.dataset.trouble;
-    const items = typeActif
-      ? baseItems.filter(i => i.troubles.includes(t) && i.type === typeActif)
-      : baseItems.filter(i => i.troubles.includes(t));
+    const items = baseItems.filter(i => {
+      if (!i.troubles.includes(t)) return false;
+      if (typeActif && i.type !== typeActif) return false;
+      return true;
+    });
     let countSpan = chip.querySelector(".chip-count");
     if (!countSpan) {
       countSpan = document.createElement("span");
@@ -141,8 +143,8 @@ function mettreAJourCompteursFiltres() {
 
   zoneTypes.querySelectorAll(".chip-type").forEach(chip => {
     const t = chip.dataset.type;
-    const items = troubleActif
-      ? baseItems.filter(i => i.type === t && i.troubles.includes(troubleActif))
+    const items = troublesActifs.size > 0
+      ? baseItems.filter(i => i.type === t && i.troubles.some(tr => troublesActifs.has(tr)))
       : baseItems.filter(i => i.type === t);
     let countSpan = chip.querySelector(".chip-count");
     if (!countSpan) {
@@ -312,6 +314,10 @@ function rendreCarte(item) {
     lien.rel = "noopener noreferrer";
     lien.innerHTML = 'Voir la ressource <span aria-hidden="true" style="font-size:0.75em;">↗</span>';
     lien.setAttribute("aria-label", `Voir la ressource : ${item.title} (s'ouvre dans un nouvel onglet)`);
+    lien.addEventListener("click", e => {
+      e.preventDefault();
+      if (window._ouvrirPreview) window._ouvrirPreview(item);
+    });
     lienBloc.appendChild(lien);
   } else {
     const indispo = document.createElement("span");
@@ -402,8 +408,8 @@ function mettreAJourGrille() {
   pageActuelle = 1;
   grille.innerHTML = "";
 
-  const filtreActif = catActive !== "tout" || typeActif !== null || troubleActif !== null || recherche.trim() !== "";
-  const masquerEdito = typeActif !== null || troubleActif !== null || recherche.trim() !== "" || catActive === "favoris";
+  const filtreActif = catActive !== "tout" || typeActif !== null || troublesActifs.size > 0 || recherche.trim() !== "";
+  const masquerEdito = typeActif !== null || troublesActifs.size > 0 || recherche.trim() !== "" || catActive === "favoris";
   sectionEdito.style.display = masquerEdito ? "none" : "";
 
   const panelAffiner = document.getElementById("filtres-avances");
@@ -500,7 +506,7 @@ function mettreAJourGrille() {
     if (tabBtn) partiesFiltres.push(tabBtn.textContent.trim());
   }
   if (typeActif) partiesFiltres.push(typeActif);
-  if (troubleActif) partiesFiltres.push(troubleActif);
+  if (troublesActifs.size > 0) partiesFiltres.push([...troublesActifs].join(" + "));
   if (recherche.trim()) partiesFiltres.push(`"${recherche.trim()}"`);
   document.title = partiesFiltres.length > 0
     ? `${partiesFiltres.join(" · ")} — WikiPerché`
@@ -511,7 +517,7 @@ function mettreAJourGrille() {
   syncURL();
 
   /* Scroll vers les résultats après un changement de filtre sur mobile (pas au chargement ni popstate) */
-  if (!_isInitialLoad && !_isPopstate && window.innerWidth <= 600 && (typeActif || troubleActif || recherche.trim())) {
+  if (!_isInitialLoad && !_isPopstate && window.innerWidth <= 600 && (typeActif || troublesActifs.size > 0 || recherche.trim())) {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cible = document.getElementById("resultats-label") || grille;
     cible.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "start" });
@@ -532,9 +538,9 @@ function mettreAJourResumeFiltres() {
   if (typeActif) {
     ajouterChipResume(typeActif, () => activerFiltreTag(typeActif, true));
   }
-  if (troubleActif) {
-    ajouterChipResume(troubleActif, () => activerFiltreTag(troubleActif, false));
-  }
+  troublesActifs.forEach(t => {
+    ajouterChipResume(t, () => activerFiltreTag(t, false));
+  });
   if (recherche.trim()) {
     ajouterChipResume(`"${recherche.trim()}"`, () => {
       inputRecherche.value = "";
@@ -558,9 +564,13 @@ function activerFiltreTag(valeur, estType) {
       c.setAttribute("aria-pressed", match ? "true" : "false");
     });
   } else {
-    troubleActif = troubleActif === valeur ? null : valeur;
+    if (troublesActifs.has(valeur)) {
+      troublesActifs.delete(valeur);
+    } else {
+      troublesActifs.add(valeur);
+    }
     zoneTroubles.querySelectorAll(".chip-trouble").forEach(c => {
-      const match = c.dataset.trouble === troubleActif;
+      const match = troublesActifs.has(c.dataset.trouble);
       c.classList.toggle("actif", match);
       c.setAttribute("aria-pressed", match ? "true" : "false");
     });
@@ -719,17 +729,17 @@ function construireFiltresTroubles() {
   zoneTroubles.addEventListener("click", e => {
     const chip = e.target.closest(".chip-trouble");
     if (!chip) return;
-    if (troubleActif === chip.dataset.trouble) {
-      troubleActif = null;
-      chip.classList.remove("actif");
-      chip.setAttribute("aria-pressed", "false");
+    const val = chip.dataset.trouble;
+    if (troublesActifs.has(val)) {
+      troublesActifs.delete(val);
     } else {
-      troubleActif = chip.dataset.trouble;
-      zoneTroubles.querySelectorAll(".chip-trouble").forEach(c => {
-        c.classList.toggle("actif", c === chip);
-        c.setAttribute("aria-pressed", c === chip ? "true" : "false");
-      });
+      troublesActifs.add(val);
     }
+    zoneTroubles.querySelectorAll(".chip-trouble").forEach(c => {
+      const match = troublesActifs.has(c.dataset.trouble);
+      c.classList.toggle("actif", match);
+      c.setAttribute("aria-pressed", match ? "true" : "false");
+    });
     mettreAJourGrille();
   });
 }
@@ -748,7 +758,7 @@ function ouvrirGroupeDuTrouble(trouble) {
 function toutEffacer() {
   catActive = "tout";
   typeActif = null;
-  troubleActif = null;
+  troublesActifs.clear();
   recherche = "";
   inputRecherche.value = "";
   zoneSections.querySelectorAll(".tab-section").forEach(b => {
@@ -775,12 +785,12 @@ function syncURL() {
   const params = new URLSearchParams();
   if (catActive !== "tout") params.set("section", catActive);
   if (typeActif) params.set("type", typeActif);
-  if (troubleActif) params.set("trouble", troubleActif);
+  if (troublesActifs.size > 0) params.set("troubles", [...troublesActifs].join(","));
   if (recherche.trim()) params.set("q", recherche.trim());
   const nouvelleURL = params.toString()
     ? `${location.pathname}?${params}`
     : location.pathname;
-  const state = { catActive, typeActif, troubleActif, recherche };
+  const state = { catActive, typeActif, troublesActifs: [...troublesActifs], recherche };
   if (_isPopstate || _isInitialLoad) {
     history.replaceState(state, "", nouvelleURL);
   } else {
@@ -794,12 +804,12 @@ window.addEventListener("popstate", e => {
   if (s) {
     catActive = s.catActive || "tout";
     typeActif = s.typeActif || null;
-    troubleActif = s.troubleActif || null;
+    troublesActifs = new Set(s.troublesActifs || []);
     recherche = s.recherche || "";
   } else {
     catActive = "tout";
     typeActif = null;
-    troubleActif = null;
+    troublesActifs = new Set();
     recherche = "";
   }
   inputRecherche.value = recherche;
@@ -815,14 +825,11 @@ window.addEventListener("popstate", e => {
     c.setAttribute("aria-pressed", actif ? "true" : "false");
   });
   zoneTroubles.querySelectorAll(".chip-trouble").forEach(c => {
-    const actif = c.dataset.trouble === troubleActif;
+    const actif = troublesActifs.has(c.dataset.trouble);
     c.classList.toggle("actif", actif);
     c.setAttribute("aria-pressed", actif ? "true" : "false");
   });
-  /* Ouvrir le groupe contenant le trouble actif si nécessaire */
-  if (troubleActif) {
-    ouvrirGroupeDuTrouble(troubleActif);
-  }
+  troublesActifs.forEach(t => ouvrirGroupeDuTrouble(t));
   mettreAJourGrille();
   _isPopstate = false;
 });
@@ -840,7 +847,12 @@ function lireURL() {
   }
   if (params.has("section")) catActive = params.get("section");
   if (params.has("type")) typeActif = params.get("type");
-  if (params.has("trouble")) troubleActif = params.get("trouble");
+  if (params.has("trouble")) {
+    troublesActifs = new Set([params.get("trouble")]);
+  }
+  if (params.has("troubles")) {
+    troublesActifs = new Set(params.get("troubles").split(",").filter(s => s.length > 0));
+  }
   if (params.has("q")) {
     recherche = params.get("q");
     const inputRecherche = document.getElementById("recherche");
@@ -857,7 +869,7 @@ function lireURL() {
     c.setAttribute("aria-pressed", actif ? "true" : "false");
   });
   document.querySelectorAll(".chip-trouble").forEach(c => {
-    const actif = c.dataset.trouble === troubleActif;
+    const actif = troublesActifs.has(c.dataset.trouble);
     c.classList.toggle("actif", actif);
     c.setAttribute("aria-pressed", actif ? "true" : "false");
   });
@@ -1221,6 +1233,252 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
     });
     dots.forEach((d, i) => d.classList.toggle("actif", i === closest));
   }, { passive: true });
+})();
+
+/* ---- Preview modale : page intermédiaire avant de quitter le site ---- */
+(function() {
+  const overlay = document.getElementById("preview-overlay");
+  const modal = document.getElementById("preview-modal");
+  if (!overlay || !modal) return;
+
+  function extraireDomaine(url) {
+    try {
+      const u = new URL(url);
+      return u.hostname.replace(/^www\./, "");
+    } catch { return ""; }
+  }
+
+  function trouverSimilaires(item, max) {
+    const tous = tousLesItems();
+    const scores = [];
+    tous.forEach(other => {
+      if (other.id === item.id) return;
+      let score = 0;
+      item.troubles.forEach(t => { if (other.troubles.includes(t)) score += 2; });
+      if (other.type === item.type) score += 1;
+      if (other.cat === item.cat) score += 1;
+      if (score > 0) scores.push({ item: other, score });
+    });
+    scores.sort((a, b) => b.score - a.score);
+    return scores.slice(0, max).map(s => s.item);
+  }
+
+  function ouvrirPreview(item) {
+    const domaine = item.link ? extraireDomaine(item.link) : "";
+    const similaires = trouverSimilaires(item, 3);
+
+    let tagsHtml = "";
+    if (item.type) tagsHtml += `<span class="carte-tag">${item.type}</span>`;
+    item.troubles.forEach(t => {
+      if (t && t.trim()) tagsHtml += `<span class="carte-tag">${t}</span>`;
+    });
+
+    let similairesHtml = "";
+    if (similaires.length > 0) {
+      similairesHtml = `<div class="preview-similaires">
+        <p class="preview-similaires-titre">Ressources similaires</p>
+        <div class="preview-similaires-liste">
+          ${similaires.map(s => {
+            const sDomaine = s.link ? extraireDomaine(s.link) : "";
+            return `<button class="preview-similaire" data-preview-id="${s.id}" type="button">
+              <span class="preview-similaire-icone">${s.icon || "📌"}</span>
+              <span class="preview-similaire-info">
+                <span class="preview-similaire-titre">${s.title}</span>
+                <span class="preview-similaire-type">${s.type}${sDomaine ? " · " + sDomaine : ""}</span>
+              </span>
+            </button>`;
+          }).join("")}
+        </div>
+      </div>`;
+    }
+
+    modal.innerHTML = `
+      <button class="preview-close" id="preview-close" aria-label="Fermer l'aperçu">✕</button>
+      <div class="preview-header">
+        <div class="preview-icone" aria-hidden="true">${item.icon || "📌"}</div>
+        <h2 class="preview-titre">${item.title}</h2>
+      </div>
+      <div class="preview-meta">
+        <span class="preview-meta-item"><span class="preview-meta-icon" aria-hidden="true">📁</span> ${item.type || "Autre"}</span>
+        ${domaine ? `<span class="preview-meta-item"><span class="preview-meta-icon" aria-hidden="true">🌐</span> ${domaine}</span>` : ""}
+        ${item.cat ? `<span class="preview-meta-item"><span class="preview-meta-icon" aria-hidden="true">📂</span> ${item.labelSection || item.cat}</span>` : ""}
+      </div>
+      ${item.desc ? `<p class="preview-desc">${item.desc}</p>` : ""}
+      ${tagsHtml ? `<div class="preview-tags">${tagsHtml}</div>` : ""}
+      <div class="preview-actions">
+        ${item.link ? `<a class="preview-btn-ouvrir" href="${item.link}" target="_blank" rel="noopener noreferrer">Voir la ressource <span aria-hidden="true" style="font-size:0.8em;">↗</span></a>` : `<span class="carte-lien-indispo" style="padding:12px 24px;">Lien à venir</span>`}
+        <button class="preview-btn-fermer" id="preview-fermer">Revenir aux résultats</button>
+      </div>
+      ${similairesHtml}
+    `;
+
+    overlay.hidden = false;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => overlay.classList.add("visible"));
+    });
+    document.body.style.overflow = "hidden";
+
+    /* Close handlers */
+    modal.querySelector("#preview-close").addEventListener("click", fermerPreview);
+    modal.querySelector("#preview-fermer").addEventListener("click", fermerPreview);
+
+    /* Similar resource click → open that resource's preview */
+    modal.querySelectorAll("[data-preview-id]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.previewId;
+        const found = tousLesItems().find(i => i.id === id);
+        if (found) ouvrirPreview(found);
+      });
+    });
+
+    /* Focus trap: focus the close button */
+    modal.querySelector("#preview-close").focus();
+  }
+
+  function fermerPreview() {
+    overlay.classList.remove("visible");
+    document.body.style.overflow = "";
+    setTimeout(() => { overlay.hidden = true; }, 200);
+  }
+
+  /* Close on overlay click (not modal) */
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) fermerPreview();
+  });
+
+  /* Close on Escape */
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !overlay.hidden) fermerPreview();
+  });
+
+  /* Expose for use in rendreCarte */
+  window._ouvrirPreview = ouvrirPreview;
+})();
+
+/* ---- Parcours guidé : entrée par situation / symptôme ---- */
+(function() {
+  const PARCOURS_KEY = "wikip-parcours-vu";
+  const guide = document.getElementById("parcours-guide");
+  if (!guide || localStorage.getItem(PARCOURS_KEY)) {
+    if (guide) guide.hidden = true;
+    return;
+  }
+
+  const etape1 = document.getElementById("parcours-etape-1");
+  const etape2 = document.getElementById("parcours-etape-2");
+  const question2 = document.getElementById("parcours-question-2");
+  const choix2 = document.getElementById("parcours-choix-2");
+
+  /* Mapping situations → étape 2 */
+  const SITUATIONS = {
+    triste: {
+      question: "Qu'est-ce qui te parle le plus\u00a0?",
+      options: [
+        { label: "Dépression", troubles: ["Dépression"] },
+        { label: "Anxiété / Angoisse", troubles: ["Anxiété/Angoisse"] },
+        { label: "Envies suicidaires / Mal de vivre", troubles: ["Dépression"], search: "suicide" },
+        { label: "Addictions", troubles: ["Addictions"] },
+        { label: "Autre chose", section: "retablissement" }
+      ]
+    },
+    proche: {
+      question: "Tu accompagnes quelqu'un. Quel sujet t'intéresse\u00a0?",
+      options: [
+        { label: "Être proche aidant", troubles: ["Proches aidants"] },
+        { label: "Comprendre la bipolarité", troubles: ["Bipolarité"] },
+        { label: "Comprendre la schizophrénie", troubles: ["Schizophrénie"] },
+        { label: "Comprendre le borderline", troubles: ["Borderline / TPL"] },
+        { label: "Premiers secours en santé mentale", search: "premiers secours" }
+      ]
+    },
+    comprendre: {
+      question: "Quel trouble veux-tu explorer\u00a0?",
+      options: [
+        { label: "Bipolarité", troubles: ["Bipolarité"] },
+        { label: "Schizophrénie", troubles: ["Schizophrénie"] },
+        { label: "Borderline / TPL", troubles: ["Borderline / TPL"] },
+        { label: "TDAH adulte", troubles: ["TDAH adulte"] },
+        { label: "TSA / Autisme", troubles: ["TSA / autisme"] },
+        { label: "TCA", troubles: ["TCA"] },
+        { label: "TSPT / PTSD", troubles: ["TSPT / PTSD"] },
+        { label: "Dépression", troubles: ["Dépression"] }
+      ]
+    }
+  };
+
+  function fermerParcours() {
+    guide.hidden = true;
+    localStorage.setItem(PARCOURS_KEY, "1");
+  }
+
+  function appliquerChoix(option) {
+    fermerParcours();
+    /* Reset filters */
+    catActive = "tout";
+    typeActif = null;
+    troublesActifs.clear();
+    recherche = "";
+    inputRecherche.value = "";
+
+    if (option.troubles) {
+      option.troubles.forEach(t => troublesActifs.add(t));
+      zoneTroubles.querySelectorAll(".chip-trouble").forEach(c => {
+        const match = troublesActifs.has(c.dataset.trouble);
+        c.classList.toggle("actif", match);
+        c.setAttribute("aria-pressed", match ? "true" : "false");
+      });
+      troublesActifs.forEach(t => ouvrirGroupeDuTrouble(t));
+    }
+    if (option.section) {
+      catActive = option.section;
+      zoneSections.querySelectorAll(".tab-section").forEach(b => {
+        const actif = b.dataset.cat === catActive;
+        b.classList.toggle("actif", actif);
+        b.setAttribute("aria-pressed", actif ? "true" : "false");
+      });
+    }
+    if (option.search) {
+      recherche = option.search;
+      inputRecherche.value = option.search;
+    }
+    majClearBtn();
+    mettreAJourGrille();
+  }
+
+  /* Étape 1 : choix de situation */
+  etape1.addEventListener("click", e => {
+    const btn = e.target.closest("[data-situation]");
+    if (!btn) return;
+    const sit = btn.dataset.situation;
+
+    if (sit === "explorer") {
+      fermerParcours();
+      return;
+    }
+
+    const config = SITUATIONS[sit];
+    if (!config) return;
+
+    etape1.hidden = true;
+    etape2.hidden = false;
+    question2.textContent = config.question;
+    choix2.innerHTML = "";
+    config.options.forEach(opt => {
+      const b = document.createElement("button");
+      b.className = "parcours-btn";
+      b.textContent = opt.label;
+      b.addEventListener("click", () => appliquerChoix(opt));
+      choix2.appendChild(b);
+    });
+  });
+
+  /* Retour et skip */
+  document.getElementById("parcours-retour").addEventListener("click", () => {
+    etape2.hidden = true;
+    etape1.hidden = false;
+  });
+  document.getElementById("parcours-skip").addEventListener("click", fermerParcours);
+  document.getElementById("parcours-skip-2").addEventListener("click", fermerParcours);
 })();
 
 /* ---- Indicateur scroll chips ---- */
