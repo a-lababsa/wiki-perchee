@@ -211,7 +211,6 @@ function typeVersColor(type) {
 
 function rendreCarte(item) {
   const li = document.createElement("li");
-  li.style.listStyle = "none";
   const div = document.createElement("article");
   div.className = "carte";
   const titreId = "titre-" + item.id;
@@ -303,9 +302,6 @@ function rendreCarte(item) {
 
   const lienBloc = document.createElement("div");
   lienBloc.className = "carte-lien-bloc";
-  lienBloc.style.display = "flex";
-  lienBloc.style.alignItems = "center";
-  lienBloc.style.justifyContent = "space-between";
   if (item.link) {
     const lien = document.createElement("a");
     lien.className = "carte-lien";
@@ -1125,11 +1121,9 @@ btnRetourHaut.addEventListener("click", () => {
   const bandeau = document.getElementById("bandeau-crise");
   const CRISE_KEY = "wikip-crise-ferme";
   function majPaddingCrise() {
-    if (bandeau.style.display === "none") {
-      document.body.style.paddingBottom = "0";
-    } else {
-      document.body.style.paddingBottom = bandeau.offsetHeight + "px";
-    }
+    const h = bandeau.style.display === "none" ? 0 : bandeau.offsetHeight;
+    document.body.style.paddingBottom = h + "px";
+    document.documentElement.style.setProperty('--crise-h', h + 'px');
   }
   window.addEventListener("resize", majPaddingCrise);
   majPaddingCrise();
@@ -1331,8 +1325,24 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
       });
     });
 
-    /* Focus trap: focus the close button */
+    /* Focus trap */
     modal.querySelector("#preview-close").focus();
+    modal.addEventListener("keydown", function trapFocus(e) {
+      if (e.key !== "Tab") return;
+      const focusable = modal.querySelectorAll(
+        'button, a[href], input, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
   }
 
   function fermerPreview() {
