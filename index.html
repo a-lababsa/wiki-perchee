@@ -83,6 +83,14 @@
   </div>
 
   <!-- ============================================
+       ONBOARDING (repositionné au-dessus des filtres)
+  ============================================= -->
+  <div class="bandeau-onboarding" id="bandeau-onboarding" role="status" style="display:none;">
+    <span class="bandeau-onboarding-msg"><strong>Bienvenue. Tu es au bon endroit.</strong><br>Utilise les filtres ci-dessous pour explorer par thème, ou commence par notre sélection plus bas.</span>
+    <button class="bandeau-onboarding-close" id="bandeau-onboarding-close" aria-label="Fermer le message d'aide">✕</button>
+  </div>
+
+  <!-- ============================================
        FILTRES : section / type / trouble
   ============================================= -->
   <nav class="filtres-zone" aria-label="Filtres">
@@ -123,10 +131,6 @@
        GRILLE DE CARTES
   ============================================= -->
   <main class="grille-wrapper" id="main-contenu">
-    <div class="bandeau-onboarding" id="bandeau-onboarding" role="status" style="display:none;">
-      <span class="bandeau-onboarding-msg">Explore par thème ou trouble ci-dessus, filtre par type de contenu, et sauvegarde tes favoris avec le ❤️ pour y revenir.</span>
-      <button class="bandeau-onboarding-close" id="bandeau-onboarding-close" aria-label="Fermer le message d'aide">✕</button>
-    </div>
     <div class="vue-toggle-wrap" aria-label="Mode d'affichage">
       <div class="vue-toggle-groupe" role="group" aria-label="Choisir la vue">
         <button class="btn-vue actif" id="btn-vue-grille" aria-pressed="true" aria-label="Vue grille" title="Vue grille">⊞</button>
@@ -135,8 +139,9 @@
     </div>
     <section class="section-edito" id="section-edito" aria-label="Sélection pour commencer">
       <h2 class="section-edito-titre">✨ Pour commencer</h2>
-      <p style="font-size:0.82rem;color:var(--texte-doux);margin:-8px 0 14px;">Une sélection de l'équipe pour débuter</p>
+      <p class="section-edito-sous">Une sélection de l'équipe pour débuter</p>
       <div class="grille" id="grille-edito" role="list" aria-label="Ressources recommandées pour commencer"></div>
+      <div class="edito-dots" id="edito-dots" aria-hidden="true"></div>
     </section>
     <h2 class="sr-only">Toutes les ressources</h2>
     <p class="resultats-label" id="resultats-label" aria-live="polite" aria-atomic="true"></p>
@@ -153,9 +158,10 @@
   ============================================= -->
   <button id="btn-retour-haut" aria-label="Retour en haut de page" title="Retour en haut">↑</button>
 
+  <div id="crise-alerte-sr" aria-live="assertive" aria-atomic="true"></div>
   <div class="bandeau-crise" id="bandeau-crise" role="complementary" aria-label="Numéros d'aide en cas d'urgence">
     <span>Besoin d'aide maintenant&#8201;?</span>
-    <a href="tel:3114">3114</a> <span style="font-size:0.75rem;">(prévention du suicide, 24h/24)</span>
+    <a href="tel:3114">3114</a> <span style="font-size:0.82rem;">(prévention du suicide, 24h/24)</span>
     <span class="bandeau-crise-sep" aria-hidden="true">·</span>
     <a href="tel:0800858858">SOS Psychiatrie 0 800 858 858</a>
     <span class="bandeau-crise-sep" aria-hidden="true">·</span>
@@ -165,11 +171,13 @@
 
   <footer class="footer" role="contentinfo">
     <div class="footer-inner">
-      <span>WikiPerché — par <a href="https://lamaisonperchee.org" target="_blank" rel="noopener noreferrer">La Maison Perchée</a></span>
+      <span>WikiPerché — par <a href="https://maisonperchee.org" target="_blank" rel="noopener noreferrer">La Maison Perchée</a></span>
       <span class="footer-sep" aria-hidden="true">·</span>
       <span>Ressources sélectionnées et mises à jour par l'équipe de La Maison Perchée</span>
       <span class="footer-sep" aria-hidden="true">·</span>
-      <a href="mailto:contact@lamaisonperchee.org">Contact</a>
+      <a href="mailto:contact@maisonperchee.org">Contact</a>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <span>En cas d'urgence : <a href="tel:3114" style="font-weight:600;">3114</a> (24h/24)</span>
     </div>
   </footer>
 

@@ -51,6 +51,7 @@ let favoris = new Set(JSON.parse(localStorage.getItem(FAVORIS_KEY) || "[]"));
 let vueActive = localStorage.getItem("wikip-vue") || "grille";
 let debounceTimer;
 let toastTimer = null;
+let _itemsFiltresCache = null;
 
 /* =============================================================================
    3. RÉFÉRENCES DOM
@@ -108,6 +109,50 @@ function itemsFiltres() {
   });
 }
 
+function mettreAJourCompteursFiltres() {
+  const baseItems = tousLesItems().filter(item => {
+    if (catActive === "favoris" && !favoris.has(item.id)) return false;
+    if (catActive !== "tout" && catActive !== "favoris" && item.cat !== catActive) return false;
+    const terme = recherche.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (terme) {
+      const haystack = (item.title + " " + item.desc + " " + item.type + " " + item.troubles.join(" "))
+        .toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      if (!haystack.includes(terme)) return false;
+    }
+    return true;
+  });
+
+  zoneTroubles.querySelectorAll(".chip-trouble").forEach(chip => {
+    const t = chip.dataset.trouble;
+    const items = typeActif
+      ? baseItems.filter(i => i.troubles.includes(t) && i.type === typeActif)
+      : baseItems.filter(i => i.troubles.includes(t));
+    let countSpan = chip.querySelector(".chip-count");
+    if (!countSpan) {
+      countSpan = document.createElement("span");
+      countSpan.className = "chip-count";
+      countSpan.style.cssText = "opacity:0.6;margin-left:4px;font-size:0.7em;";
+      chip.appendChild(countSpan);
+    }
+    countSpan.textContent = `(${items.length})`;
+  });
+
+  zoneTypes.querySelectorAll(".chip-type").forEach(chip => {
+    const t = chip.dataset.type;
+    const items = troubleActif
+      ? baseItems.filter(i => i.type === t && i.troubles.includes(troubleActif))
+      : baseItems.filter(i => i.type === t);
+    let countSpan = chip.querySelector(".chip-count");
+    if (!countSpan) {
+      countSpan = document.createElement("span");
+      countSpan.className = "chip-count";
+      countSpan.style.cssText = "opacity:0.6;margin-left:4px;font-size:0.7em;";
+      chip.appendChild(countSpan);
+    }
+    countSpan.textContent = `(${items.length})`;
+  });
+}
+
 /* =============================================================================
    5. FAVORIS
    ============================================================================= */
@@ -139,7 +184,7 @@ function afficherToast(msg) {
   toast.textContent = msg;
   toast.classList.add("visible");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("visible"), 2000);
+  toastTimer = setTimeout(() => toast.classList.remove("visible"), 3000);
 }
 
 /* =============================================================================
@@ -165,6 +210,8 @@ function rendreCarte(item) {
   li.style.listStyle = "none";
   const div = document.createElement("article");
   div.className = "carte";
+  const titreId = "titre-" + item.id;
+  div.setAttribute("aria-labelledby", titreId);
 
   const bande = document.createElement("div");
   bande.className = "carte-type-bande";
@@ -185,6 +232,7 @@ function rendreCarte(item) {
 
   const titre = document.createElement("h3");
   titre.className = "carte-titre";
+  titre.id = titreId;
   titre.textContent = item.title;
 
   const desc = document.createElement("p");
@@ -219,7 +267,6 @@ function rendreCarte(item) {
     if (item.type && item.type.trim()) {
       const pillType = document.createElement("button");
       pillType.className = "carte-tag";
-      pillType.setAttribute("tabindex", "-1");
       pillType.textContent = item.type;
       pillType.setAttribute("aria-label", `Filtrer par type : ${item.type}`);
       pillType.title = `Filtrer par type : ${item.type}`;
@@ -230,7 +277,6 @@ function rendreCarte(item) {
       if (!t || !t.trim()) return;
       const pill = document.createElement("button");
       pill.className = "carte-tag";
-      pill.setAttribute("tabindex", "-1");
       pill.textContent = t;
       pill.setAttribute("aria-label", `Filtrer par trouble : ${t}`);
       pill.title = `Filtrer par trouble : ${t}`;
@@ -262,7 +308,7 @@ function rendreCarte(item) {
     lien.href = item.link;
     lien.target = "_blank";
     lien.rel = "noopener noreferrer";
-    lien.textContent = "Voir la ressource →";
+    lien.innerHTML = 'Voir la ressource <span aria-hidden="true" style="font-size:0.75em;">↗</span>';
     lien.setAttribute("aria-label", `Voir la ressource : ${item.title} (s'ouvre dans un nouvel onglet)`);
     lienBloc.appendChild(lien);
   } else {
@@ -325,10 +371,10 @@ function afficherPage(items, page) {
     btnVoirPlus.id = "btn-voir-plus";
     btnVoirPlus.className = "btn-voir-plus";
     const restant = items.length - fin;
-    btnVoirPlus.textContent = `Voir ${Math.min(restant, PAGE_SIZE)} ressources de plus (${restant} restantes sur ${items.length})`;
+    btnVoirPlus.textContent = `Voir plus (${restant} restantes)`;
     btnVoirPlus.addEventListener("click", () => {
       pageActuelle++;
-      afficherPage(itemsFiltres(), pageActuelle);
+      afficherPage(_itemsFiltresCache || itemsFiltres(), pageActuelle);
     });
     grille.insertAdjacentElement("afterend", btnVoirPlus);
   }
@@ -349,7 +395,8 @@ function afficherPage(items, page) {
    ============================================================================= */
 
 function mettreAJourGrille() {
-  const items = itemsFiltres();
+  _itemsFiltresCache = itemsFiltres();
+  const items = _itemsFiltresCache;
   pageActuelle = 1;
   grille.innerHTML = "";
 
@@ -386,6 +433,8 @@ function mettreAJourGrille() {
       `;
     }
     grille.appendChild(vide);
+    resultatsLabel.textContent = catActive === "favoris" ? "Pas encore de favoris" : "Aucune ressource trouvée";
+    resultatsLabel.classList.add("vide");
     const ancienBtn = document.getElementById("btn-voir-plus");
     if (ancienBtn) ancienBtn.remove();
     document.getElementById("barre-progression-wrap").classList.remove("visible");
@@ -399,20 +448,32 @@ function mettreAJourGrille() {
     partageWrap.innerHTML = "";
     const btnPartager = document.createElement("button");
     btnPartager.className = "btn-partager-favoris";
-    btnPartager.innerHTML = "🔗 Partager ma sélection";
+    btnPartager.textContent = "\uD83D\uDD17 Partager ma s\u00e9lection";
     btnPartager.setAttribute("aria-label", "Copier un lien vers mes favoris");
     btnPartager.addEventListener("click", () => {
       const ids = [...favoris].join(",");
       const url = `${location.origin}${location.pathname}?favoris=${encodeURIComponent(ids)}`;
       navigator.clipboard.writeText(url).then(() => {
-        btnPartager.innerHTML = "✓ Lien copié !";
+        btnPartager.textContent = "\u2713 Lien copi\u00e9 !";
         btnPartager.classList.add("copie");
         setTimeout(() => {
-          btnPartager.innerHTML = "🔗 Partager ma sélection";
+          btnPartager.textContent = "\uD83D\uDD17 Partager ma s\u00e9lection";
           btnPartager.classList.remove("copie");
         }, 2500);
       }).catch(() => {
-        prompt("Copie ce lien :", url);
+        const input = document.createElement("input");
+        input.value = url;
+        input.style.cssText = "position:fixed;top:-9999px;";
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        input.remove();
+        btnPartager.textContent = "\u2713 Lien copi\u00e9 !";
+        btnPartager.classList.add("copie");
+        setTimeout(() => {
+          btnPartager.textContent = "\uD83D\uDD17 Partager ma s\u00e9lection";
+          btnPartager.classList.remove("copie");
+        }, 2500);
       });
     });
     partageWrap.appendChild(btnPartager);
@@ -444,19 +505,40 @@ function mettreAJourGrille() {
     : "WikiPerché — par La Maison Perchée";
 
   mettreAJourResumeFiltres();
+  mettreAJourCompteursFiltres();
   syncURL();
+
+  /* Scroll vers les résultats après un changement de filtre sur mobile */
+  if (window.innerWidth <= 600 && (typeActif || troubleActif || recherche.trim())) {
+    const cible = document.getElementById("resultats-label") || grille;
+    cible.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function mettreAJourResumeFiltres() {
   const resume = document.getElementById("filtres-resume");
   resume.innerHTML = "";
-  if (typeActif) {
+  function ajouterChipResume(label, onRemove) {
     const chip = document.createElement("button");
     chip.className = "chip-resume";
-    chip.setAttribute("aria-label", `Retirer le filtre ${typeActif}`);
-    chip.innerHTML = `${typeActif} <span class="chip-resume-x" aria-hidden="true">✕</span>`;
-    chip.addEventListener("click", () => { activerFiltreTag(typeActif, true); });
+    chip.setAttribute("aria-label", `Retirer le filtre ${label}`);
+    chip.innerHTML = `${label} <span class="chip-resume-x" aria-hidden="true">✕</span>`;
+    chip.addEventListener("click", onRemove);
     resume.appendChild(chip);
+  }
+  if (typeActif) {
+    ajouterChipResume(typeActif, () => activerFiltreTag(typeActif, true));
+  }
+  if (troubleActif) {
+    ajouterChipResume(troubleActif, () => activerFiltreTag(troubleActif, false));
+  }
+  if (recherche.trim()) {
+    ajouterChipResume(`"${recherche.trim()}"`, () => {
+      inputRecherche.value = "";
+      recherche = "";
+      majClearBtn();
+      mettreAJourGrille();
+    });
   }
 }
 
@@ -593,13 +675,15 @@ function construireFiltresTroubles() {
     if (filtres.length === 0) return;
 
     const groupe = document.createElement("div");
-    groupe.className = "filtres-groupe ouvert";
+    const isMobile = window.innerWidth <= 600;
+    groupe.className = isMobile ? "filtres-groupe" : "filtres-groupe ouvert";
 
     const lbl = document.createElement("button");
     lbl.className = "filtres-groupe-label";
     lbl.type = "button";
     lbl.textContent = groupeLabel;
-    lbl.setAttribute("aria-expanded", "true");
+    lbl.setAttribute("aria-label", `${groupeLabel} (${filtres.length} filtres)`);
+    lbl.setAttribute("aria-expanded", isMobile ? "false" : "true");
     lbl.addEventListener("click", () => {
       const ouvert = groupe.classList.toggle("ouvert");
       lbl.setAttribute("aria-expanded", String(ouvert));
@@ -682,8 +766,42 @@ function syncURL() {
   const nouvelleURL = params.toString()
     ? `${location.pathname}?${params}`
     : location.pathname;
-  history.replaceState(null, "", nouvelleURL);
+  const state = { catActive, typeActif, troubleActif, recherche };
+  history.pushState(state, "", nouvelleURL);
 }
+
+window.addEventListener("popstate", e => {
+  const s = e.state;
+  if (s) {
+    catActive = s.catActive || "tout";
+    typeActif = s.typeActif || null;
+    troubleActif = s.troubleActif || null;
+    recherche = s.recherche || "";
+  } else {
+    catActive = "tout";
+    typeActif = null;
+    troubleActif = null;
+    recherche = "";
+  }
+  inputRecherche.value = recherche;
+  majClearBtn();
+  document.querySelectorAll(".tab-section").forEach(b => {
+    const actif = b.dataset.cat === catActive;
+    b.classList.toggle("actif", actif);
+    b.setAttribute("aria-pressed", actif ? "true" : "false");
+  });
+  zoneTypes.querySelectorAll(".chip-type").forEach(c => {
+    const actif = c.dataset.type === typeActif;
+    c.classList.toggle("actif", actif);
+    c.setAttribute("aria-pressed", actif ? "true" : "false");
+  });
+  zoneTroubles.querySelectorAll(".chip-trouble").forEach(c => {
+    const actif = c.dataset.trouble === troubleActif;
+    c.classList.toggle("actif", actif);
+    c.setAttribute("aria-pressed", actif ? "true" : "false");
+  });
+  mettreAJourGrille();
+});
 
 function lireURL() {
   const params = new URLSearchParams(location.search);
@@ -727,8 +845,12 @@ function lireURL() {
 
 function appliquerTaille(clé) {
   document.documentElement.style.fontSize = TAILLES[clé];
-  [btnMoins, btnNormal, btnPlus].forEach(b => b.classList.remove("actif"));
-  ({ moins: btnMoins, normal: btnNormal, plus: btnPlus })[clé].classList.add("actif");
+  const btns = { moins: btnMoins, normal: btnNormal, plus: btnPlus };
+  [btnMoins, btnNormal, btnPlus].forEach(b => {
+    const isActive = b === btns[clé];
+    b.classList.toggle("actif", isActive);
+    b.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
   localStorage.setItem("wikip-fontsize", clé);
 }
 
@@ -818,7 +940,7 @@ inputRecherche.addEventListener("input", () => {
   debounceTimer = setTimeout(() => {
     recherche = inputRecherche.value;
     mettreAJourGrille();
-  }, 150);
+  }, 300);
 });
 btnClearRecherche.addEventListener("click", () => {
   inputRecherche.value = "";
@@ -865,7 +987,15 @@ btnEffacer.addEventListener("click", toutEffacer);
 lireURL();
 appliquerVue(vueActive);
 mettreAJourBadgeFavoris();
+/* Remplacer l'état initial (pas de pushState au premier chargement) */
+history.replaceState({ catActive, typeActif, troubleActif, recherche }, "", location.href);
+/* Empêcher le premier mettreAJourGrille de faire un pushState */
+let _skipPush = true;
+const _origSyncURL = syncURL;
+syncURL = function() { if (_skipPush) return; _origSyncURL(); };
 mettreAJourGrille();
+_skipPush = false;
+syncURL = _origSyncURL;
 
 /* ---- Bandeau onboarding (première visite) ---- */
 if (!localStorage.getItem(ONBOARDING_KEY) && !localStorage.getItem(FAVORIS_KEY)) {
@@ -891,7 +1021,7 @@ if (!localStorage.getItem(ONBOARDING_KEY) && !localStorage.getItem(FAVORIS_KEY))
   const TOP_TROUBLES = ORDRE_TROUBLES.slice(0, 5);
   const label = document.createElement("span");
   label.className = "recherches-rapides-label";
-  label.textContent = "Populaires :";
+  label.textContent = "Suggestions :";
   panel.appendChild(label);
   TOP_TROUBLES.forEach(t => {
     const chip = document.createElement("button");
@@ -901,10 +1031,9 @@ if (!localStorage.getItem(ONBOARDING_KEY) && !localStorage.getItem(FAVORIS_KEY))
     chip.textContent = t;
     chip.addEventListener("mousedown", e => {
       e.preventDefault();
-      input.value = t;
-      recherche = t;
       panel.classList.remove("visible");
-      mettreAJourGrille();
+      /* Activer le filtre trouble au lieu de remplir la recherche textuelle */
+      activerFiltreTag(t, false);
     });
     panel.appendChild(chip);
   });
@@ -937,18 +1066,40 @@ if (!localStorage.getItem(ONBOARDING_KEY) && !localStorage.getItem(FAVORIS_KEY))
   });
 })();
 
+/* ---- Raccourci clavier "/" pour focus recherche ---- */
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName) && !document.activeElement.isContentEditable) {
+    e.preventDefault();
+    inputRecherche.focus();
+  }
+});
+
 /* ---- Bouton retour en haut ---- */
 window.addEventListener("scroll", () => {
-  btnRetourHaut.classList.toggle("visible", window.scrollY > 400);
+  const visible = window.scrollY > 400;
+  btnRetourHaut.classList.toggle("visible", visible);
+  btnRetourHaut.setAttribute("tabindex", visible ? "0" : "-1");
 }, { passive: true });
+btnRetourHaut.setAttribute("tabindex", "-1");
 btnRetourHaut.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({ top: 0, behavior: prefersReduced ? "auto" : "smooth" });
 });
 
 /* ---- Bandeau crise ---- */
 (function() {
   const bandeau = document.getElementById("bandeau-crise");
   const CRISE_KEY = "wikip-crise-ferme";
+  function majPaddingCrise() {
+    if (bandeau.style.display === "none") {
+      document.body.style.paddingBottom = "0";
+    } else {
+      document.body.style.paddingBottom = bandeau.offsetHeight + "px";
+    }
+  }
+  window.addEventListener("resize", majPaddingCrise);
+  majPaddingCrise();
+
   const MOTS_CRISE = [
     "suicide", "suicidaire", "mourir", "mourant", "en finir", "me tuer",
     "urgence", "crise", "automutilation", "scarification",
@@ -957,12 +1108,12 @@ btnRetourHaut.addEventListener("click", () => {
   ];
   if (sessionStorage.getItem(CRISE_KEY)) {
     bandeau.style.display = "none";
-    document.body.style.paddingBottom = "0";
+    majPaddingCrise();
   }
   document.getElementById("bandeau-crise-close").addEventListener("click", () => {
     bandeau.classList.remove("crise-alerte");
     bandeau.style.display = "none";
-    document.body.style.paddingBottom = "0";
+    majPaddingCrise();
     sessionStorage.setItem(CRISE_KEY, "1");
   });
 
@@ -977,13 +1128,16 @@ btnRetourHaut.addEventListener("click", () => {
       const m = mot.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       return t.includes(m);
     });
+    const alerteSr = document.getElementById("crise-alerte-sr");
     if (estCrise) {
       bandeau.style.display = "";
-      document.body.style.paddingBottom = "";
+      majPaddingCrise();
       bandeau.classList.add("crise-alerte");
       sessionStorage.removeItem(CRISE_KEY);
+      if (alerteSr) alerteSr.textContent = "Si tu es en détresse, appelle le 3114 maintenant. Numéro national de prévention du suicide, disponible 24h/24.";
     } else {
       bandeau.classList.remove("crise-alerte");
+      if (alerteSr) alerteSr.textContent = "";
     }
   }
 
@@ -992,6 +1146,59 @@ btnRetourHaut.addEventListener("click", () => {
   });
   /* Vérifier aussi au chargement si un terme de crise est dans l'URL */
   verifierCrise(inputRecherche.value);
+})();
+
+/* ---- Indicateur scroll carrousel éditorial ---- */
+(function() {
+  const edito = document.getElementById("grille-edito");
+  const editoSection = document.getElementById("section-edito");
+  if (edito && editoSection) {
+    const verifierScrollEdito = () => {
+      const atEnd = edito.scrollLeft + edito.clientWidth >= edito.scrollWidth - 8;
+      editoSection.classList.toggle("scrolled-end", atEnd);
+    };
+    edito.addEventListener("scroll", verifierScrollEdito, { passive: true });
+    verifierScrollEdito();
+  }
+})();
+
+/* ---- Réaction en temps réel au changement de prefers-color-scheme ---- */
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (!localStorage.getItem(THEME_KEY)) {
+    appliquerTheme(e.matches ? 'dark' : 'light');
+  }
+});
+
+/* ---- Dots du carrousel éditorial ---- */
+(function() {
+  const edito = document.getElementById("grille-edito");
+  const dotsContainer = document.getElementById("edito-dots");
+  if (!edito || !dotsContainer) return;
+  function initDots() {
+    const items = edito.querySelectorAll("li, .carte");
+    dotsContainer.innerHTML = "";
+    items.forEach((_, i) => {
+      const dot = document.createElement("button");
+      dot.className = "edito-dot" + (i === 0 ? " actif" : "");
+      dot.setAttribute("aria-label", `Aller à la ressource ${i + 1}`);
+      dot.addEventListener("click", () => {
+        items[i].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+      });
+      dotsContainer.appendChild(dot);
+    });
+  }
+  initDots();
+  edito.addEventListener("scroll", () => {
+    const dots = dotsContainer.querySelectorAll(".edito-dot");
+    const items = edito.querySelectorAll("li, .carte");
+    let closest = 0;
+    let minDist = Infinity;
+    items.forEach((item, i) => {
+      const dist = Math.abs(item.getBoundingClientRect().left - edito.getBoundingClientRect().left);
+      if (dist < minDist) { minDist = dist; closest = i; }
+    });
+    dots.forEach((d, i) => d.classList.toggle("actif", i === closest));
+  }, { passive: true });
 })();
 
 /* ---- Indicateur scroll chips ---- */
