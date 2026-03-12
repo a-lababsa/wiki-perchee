@@ -20,7 +20,6 @@ index.html              # Structure HTML (header, filtres, grille, footer)
 style.css               # Styles (layout, cartes, dark mode, responsive, accessibilité)
 app.js                  # Logique applicative (filtres, rendu, favoris, crise)
 wikiperche-data.js      # Base de données des ressources (845 ressources)
-import-resources.py     # Script d'import de nouvelles ressources
 ```
 
 ### Sections
@@ -53,48 +52,6 @@ import-resources.py     # Script d'import de nouvelles ressources
 - **Recherches fréquentes** : suggestions rapides au focus sur la barre de recherche
 - **Synchronisation URL** : les filtres actifs sont reflétés dans les paramètres de l'URL
 - **Bouton retour en haut** : apparaît après un scroll de 400px
-
-## Importer de nouvelles ressources
-
-Le script `import-resources.py` intègre des ressources depuis un fichier JSON enrichi (issu du [collecteur](../wiki-perchee-collector)).
-
-```bash
-# Prévisualiser sans modifier
-python3 import-resources.py fichier.json --dry-run
-
-# Stats uniquement
-python3 import-resources.py fichier.json --stats
-
-# Importer
-python3 import-resources.py fichier.json
-```
-
-Le script gère automatiquement :
-- Déduplication par URL et titre
-- Filtrage des ressources marquées `REJETER`
-- Mapping des types et troubles vers les conventions existantes
-- Assignation de section selon les catégories
-- Génération des IDs (slugs)
-
-### Format attendu (enriched JSON)
-
-```json
-[
-  {
-    "id": "yt-xxxxx",
-    "title": "Titre de la ressource",
-    "type": "Vidéo/Film",
-    "url": "https://...",
-    "_categories": ["general", "depression"],
-    "enrichment": {
-      "description": "Description enrichie par IA",
-      "tags_troubles": ["Dépression"],
-      "tags_type": ["Vidéo/Film"],
-      "flag_validation": "OK"
-    }
-  }
-]
-```
 
 ## Accessibilité
 
