@@ -52,6 +52,8 @@ let vueActive = localStorage.getItem("wikip-vue") || "grille";
 let debounceTimer;
 let toastTimer = null;
 let _itemsFiltresCache = null;
+let _isPopstate = false;
+let _isInitialLoad = true;
 
 /* =============================================================================
    3. RÉFÉRENCES DOM
@@ -508,10 +510,11 @@ function mettreAJourGrille() {
   mettreAJourCompteursFiltres();
   syncURL();
 
-  /* Scroll vers les résultats après un changement de filtre sur mobile */
-  if (window.innerWidth <= 600 && (typeActif || troubleActif || recherche.trim())) {
+  /* Scroll vers les résultats après un changement de filtre sur mobile (pas au chargement ni popstate) */
+  if (!_isInitialLoad && !_isPopstate && window.innerWidth <= 600 && (typeActif || troubleActif || recherche.trim())) {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cible = document.getElementById("resultats-label") || grille;
-    cible.scrollIntoView({ behavior: "smooth", block: "start" });
+    cible.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "start" });
   }
 }
 
@@ -731,6 +734,17 @@ function construireFiltresTroubles() {
   });
 }
 
+function ouvrirGroupeDuTrouble(trouble) {
+  const chip = zoneTroubles.querySelector(`.chip-trouble[data-trouble="${trouble}"]`);
+  if (!chip) return;
+  const groupe = chip.closest(".filtres-groupe");
+  if (groupe && !groupe.classList.contains("ouvert")) {
+    groupe.classList.add("ouvert");
+    const lbl = groupe.querySelector(".filtres-groupe-label");
+    if (lbl) lbl.setAttribute("aria-expanded", "true");
+  }
+}
+
 function toutEffacer() {
   catActive = "tout";
   typeActif = null;
@@ -767,10 +781,15 @@ function syncURL() {
     ? `${location.pathname}?${params}`
     : location.pathname;
   const state = { catActive, typeActif, troubleActif, recherche };
-  history.pushState(state, "", nouvelleURL);
+  if (_isPopstate || _isInitialLoad) {
+    history.replaceState(state, "", nouvelleURL);
+  } else {
+    history.pushState(state, "", nouvelleURL);
+  }
 }
 
 window.addEventListener("popstate", e => {
+  _isPopstate = true;
   const s = e.state;
   if (s) {
     catActive = s.catActive || "tout";
@@ -800,7 +819,12 @@ window.addEventListener("popstate", e => {
     c.classList.toggle("actif", actif);
     c.setAttribute("aria-pressed", actif ? "true" : "false");
   });
+  /* Ouvrir le groupe contenant le trouble actif si nécessaire */
+  if (troubleActif) {
+    ouvrirGroupeDuTrouble(troubleActif);
+  }
   mettreAJourGrille();
+  _isPopstate = false;
 });
 
 function lireURL() {
@@ -987,15 +1011,8 @@ btnEffacer.addEventListener("click", toutEffacer);
 lireURL();
 appliquerVue(vueActive);
 mettreAJourBadgeFavoris();
-/* Remplacer l'état initial (pas de pushState au premier chargement) */
-history.replaceState({ catActive, typeActif, troubleActif, recherche }, "", location.href);
-/* Empêcher le premier mettreAJourGrille de faire un pushState */
-let _skipPush = true;
-const _origSyncURL = syncURL;
-syncURL = function() { if (_skipPush) return; _origSyncURL(); };
 mettreAJourGrille();
-_skipPush = false;
-syncURL = _origSyncURL;
+_isInitialLoad = false;
 
 /* ---- Bandeau onboarding (première visite) ---- */
 if (!localStorage.getItem(ONBOARDING_KEY) && !localStorage.getItem(FAVORIS_KEY)) {
@@ -1031,20 +1048,24 @@ if (!localStorage.getItem(ONBOARDING_KEY) && !localStorage.getItem(FAVORIS_KEY))
     chip.textContent = t;
     chip.addEventListener("mousedown", e => {
       e.preventDefault();
-      panel.classList.remove("visible");
+      setPanelVisible(false);
       /* Activer le filtre trouble au lieu de remplir la recherche textuelle */
       activerFiltreTag(t, false);
     });
     panel.appendChild(chip);
   });
+  function setPanelVisible(show) {
+    panel.classList.toggle("visible", show);
+    input.setAttribute("aria-expanded", show ? "true" : "false");
+  }
   input.addEventListener("focus", () => {
-    if (!input.value.trim()) panel.classList.add("visible");
+    if (!input.value.trim()) setPanelVisible(true);
   });
   input.addEventListener("blur", () => {
-    panel.classList.remove("visible");
+    setTimeout(() => setPanelVisible(false), 150);
   });
   input.addEventListener("input", () => {
-    panel.classList.toggle("visible", !input.value.trim() && document.activeElement === input);
+    setPanelVisible(!input.value.trim() && document.activeElement === input);
   });
   input.addEventListener("keydown", e => {
     if (!panel.classList.contains("visible")) return;
@@ -1061,7 +1082,8 @@ if (!localStorage.getItem(ONBOARDING_KEY) && !localStorage.getItem(FAVORIS_KEY))
       e.preventDefault();
       chips[idx].click();
     } else if (e.key === "Escape") {
-      panel.classList.remove("visible");
+      setPanelVisible(false);
+      input.focus();
     }
   });
 })();

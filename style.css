@@ -1005,7 +1005,7 @@ body { padding-bottom: 56px; }
 }
 
 @media (max-width: 768px) {
-  .grille { grid-template-columns: repeat(2, 1fr); }
+  .grille { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
   #theme-toggle-label { display: none; }
 }
 
@@ -1198,12 +1198,11 @@ body.dys-actif {
   --tab-hover:     #2e2e2e;
 }
 :root[data-theme="dark"] .header { background: #1e1e1e; }
-:root[data-theme="dark"] .carte-icone { background: #3d3400; }
+:root[data-theme="dark"] .carte-icone { background: #3d3400; filter: brightness(1.15); }
 :root[data-theme="dark"] #recherche { background: #2a2a2a; color: var(--texte); }
 :root[data-theme="dark"] .barre-accès { background: #1e1e1e; }
 :root[data-theme="dark"] .chip { background: #2a2a2a; color: #c8bfb0; border-color: #3a3a3a; }
 :root[data-theme="dark"] .chip:hover { border-color: #d4a820; color: #f0ece4; }
-:root[data-theme="dark"] .carte-icone { filter: brightness(1.15); }
 :root[data-theme="dark"] .carte-lien { color: #e8b830; }
 :root[data-theme="dark"] .carte-lien:hover { color: #f5c842; }
 :root[data-theme="dark"] .carte-lien-indispo { color: #b0a898; background: #2e2e2e; }
