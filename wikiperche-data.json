@@ -622,7 +622,7 @@
         "icon": "📱",
         "title": "RespiRelax – Cohérence cardiaque",
         "desc": "Application gratuite pour retrouver calme et détente en quelques minutes via la cohérence cardiaque.",
-        "type": "Application",
+        "type": "Applis",
         "troubles": [
           "Dépression",
           "Anxiété/Angoisse",
@@ -639,7 +639,7 @@
         "icon": "📱",
         "title": "Calm",
         "desc": "Application de méditation avec programmes thématiques sur la gratitude, le bonheur et l'estime de soi.",
-        "type": "Application",
+        "type": "Applis",
         "troubles": [
           "Dépression",
           "Anxiété/Angoisse",
@@ -659,6 +659,587 @@
           "Annonce diagnostique"
         ],
         "link": "https://www.france-assos-sante.org/sante-info-droits"
+      },
+      {
+        "id": "konbini-bipolaire-marine",
+        "icon": "🎬",
+        "title": "Mon Quotidien en tant que Bipolaire – Marine Panzani",
+        "desc": "Marine Panzani parle de son quotidien avec la bipolarité et des moyens pour lutter contre cette maladie.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Bipolarité"
+        ],
+        "link": "https://www.konbini.com/fr/partners/video-speech-mon-quotidien-en-tant-que-bipolaire/"
+      },
+      {
+        "id": "brut-conversation-bipolarite",
+        "icon": "🎬",
+        "title": "Conversation – Maxime et sa mère parlent de la bipolarité (Brut)",
+        "desc": "Maxime et sa mère parlent de la bipolarité et de son impact sur la famille.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Bipolarité"
+        ],
+        "link": "https://www.youtube.com/watch?v=9j_i5jm_mwE"
+      },
+      {
+        "id": "konbini-schizo-lucille",
+        "icon": "🎬",
+        "title": "Vivre avec la schizophrénie | Le Speech de Lucille – Konbini",
+        "desc": "Témoignage de Lucille, pair-aidante à La Maison Perchée, sur son parcours avec la schizophrénie.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://youtu.be/-ihHRmWJuEI"
+      },
+      {
+        "id": "konbini-gringe-schizo",
+        "icon": "🎬",
+        "title": "Gringe libère la parole sur la schizophrénie – Konbini",
+        "desc": "Gringe parle de son frère Thibault, diagnostiqué schizophrène, et de leur relation.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://www.youtube.com/watch?v=VMfbKStKrig"
+      },
+      {
+        "id": "rtbf-normal-marc-schizo-affectif",
+        "icon": "🎬",
+        "title": "Normal – Marc et le trouble schizo-affectif (RTBF)",
+        "desc": "Marc témoigne de ses internements et de l'importance de séparer l'humain du diagnostic.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Trouble schizo-affectif",
+          "Bipolarité"
+        ],
+        "link": "https://www.youtube.com/watch?v=mFKodKQNAH4"
+      },
+      {
+        "id": "urbania-victoria-bipolaire",
+        "icon": "🎬",
+        "title": "Victoria, bipolaire | Entre moi et moi – Urbania",
+        "desc": "Elle raconte à son « elle » d'avant le diagnostic comment sa vie va changer, frôler la mort puis remonter la pente.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Bipolarité"
+        ],
+        "link": "https://www.youtube.com/watch?v=BjYzBSgv5HQ&t=74s"
+      },
+      {
+        "id": "les-gardes-fous-podcast",
+        "icon": "🎙️",
+        "title": "Les Gardes Fous",
+        "desc": "Témoignages sur la bipolarité, la schizophrénie, la dépression et le rétablissement.",
+        "type": "Podcast",
+        "troubles": [
+          "Bipolarité",
+          "Schizophrénie",
+          "Dépression"
+        ],
+        "link": "https://www.binge.audio/podcast/les-gardes-fous"
+      },
+      {
+        "id": "la-perche-podcast",
+        "icon": "🎙️",
+        "title": "La Perche – Podcast La Maison Perchée",
+        "desc": "La Maison Perchée tend le micro à ses membres : borderline, bipolarité, schizophrénie, schizo-affectif.",
+        "type": "Podcast",
+        "troubles": [
+          "Borderline / TPL",
+          "Bipolarité",
+          "Schizophrénie",
+          "Trouble schizo-affectif"
+        ],
+        "link": "https://www.maisonperchee.org/podcast"
+      },
+      {
+        "id": "bouquet-de-psychose-podcast",
+        "icon": "🎙️",
+        "title": "Bouquet de Psychose – Cassandre CM",
+        "desc": "Podcast sur le rétablissement suite à la psychose.",
+        "type": "Podcast",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://podcast.ausha.co/bouquet-de-psychose"
+      },
+      {
+        "id": "itineraire-bis-podcast",
+        "icon": "🎙️",
+        "title": "Itinéraire Bis – Chemins de vies atypiques",
+        "desc": "Podcast explorant les parcours de vie atypiques, avec des épisodes sur le borderline et l'annonce diagnostique.",
+        "type": "Podcast",
+        "troubles": [
+          "Borderline / TPL",
+          "Autres troubles"
+        ],
+        "link": "https://podcast.ausha.co/itineraire-bis"
+      },
+      {
+        "id": "chacun-son-tdah-podcast",
+        "icon": "🎙️",
+        "title": "Chacun son TDAH",
+        "desc": "Podcast dédié au TDAH adulte : un invité par épisode partage son quotidien, ses difficultés et ses astuces.",
+        "type": "Podcast",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://fr.player.fm/series/chacun-son-tdah"
+      },
+      {
+        "id": "tdah-anxiete-podcast",
+        "icon": "🎙️",
+        "title": "TDAH et anxiété – La petite boutique de Julie",
+        "desc": "Podcast #1 de Julie sur le TDAH et l'anxiété au quotidien, avec témoignages.",
+        "type": "Podcast",
+        "troubles": [
+          "TDAH adulte",
+          "Anxiété/Angoisse"
+        ],
+        "link": "https://open.spotify.com/show/0WwHlIq6XbQSoyPYZul1OW"
+      },
+      {
+        "id": "focus-squad-podcast",
+        "icon": "🎙️",
+        "title": "Focus Squad",
+        "desc": "Série de podcasts par Melissa Leclerc pour tout savoir sur le TDAH et les stratégies pour mieux vivre avec.",
+        "type": "Podcast",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://podcast.ausha.co/focusquad"
+      },
+      {
+        "id": "les-atypiques-du-cerveau-podcast",
+        "icon": "🎙️",
+        "title": "Les Atypiques du Cerveau",
+        "desc": "Podcast de Mélodie Ardouin sur la neurodiversité : TDAH, TSA, HP, troubles Dys, hypersensibilité.",
+        "type": "Podcast",
+        "troubles": [
+          "TDAH adulte",
+          "TSA / autisme",
+          "Autres troubles"
+        ],
+        "link": "https://fr.player.fm/series/les-atypiques-du-cerveau"
+      },
+      {
+        "id": "les-maux-bleus-podcast",
+        "icon": "🎙️",
+        "title": "Les Maux Bleus",
+        "desc": "Podcast de Place des Sciences : dépression, anxiété, trouble panique, TSPT, bipolarité, borderline, stigmatisation, transidentité.",
+        "type": "Podcast",
+        "troubles": [
+          "Dépression",
+          "Anxiété/Angoisse",
+          "Bipolarité",
+          "Borderline / TPL",
+          "TSPT / PTSD",
+          "Autres troubles"
+        ],
+        "link": "https://placedessciences.fr/nos-podcasts/les-maux-bleus/"
+      },
+      {
+        "id": "santepsyjeunes",
+        "icon": "🌐",
+        "title": "santepsyjeunes.fr",
+        "desc": "Site dédié au repérage et à la prise en charge précoce des troubles psychiques émergents de l'adolescent et du jeune adulte.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Dépression",
+          "Anxiété/Angoisse",
+          "Bipolarité",
+          "Schizophrénie",
+          "Trouble schizo-affectif",
+          "Borderline / TPL",
+          "TDAH adulte",
+          "TSA / autisme"
+        ],
+        "link": "https://santepsyjeunes.fr"
+      },
+      {
+        "id": "jepeuxenparler",
+        "icon": "🌐",
+        "title": "jepeuxenparler.fr",
+        "desc": "Campagne Nightline France pour amorcer un dialogue bienveillant autour de la santé mentale.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Dépression",
+          "Anxiété/Angoisse",
+          "Autres troubles"
+        ],
+        "link": "https://jepeuxenparler.fr"
+      },
+      {
+        "id": "pasapas-jeunes",
+        "icon": "🌐",
+        "title": "pasàpas-jeunes.fr",
+        "desc": "Conseils et infos santé mentale pour les jeunes : solitude, anxiété, dépression, dépendances.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Dépression",
+          "Anxiété/Angoisse",
+          "Addictions"
+        ],
+        "link": "https://pasapas-jeunes.fr"
+      },
+      {
+        "id": "nightline-kit-de-vie",
+        "icon": "🌐",
+        "title": "nightline.fr – Kit de vie",
+        "desc": "Outils Nightline pour prendre soin de sa santé mentale, spécifiquement adaptés aux jeunes adultes.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Anxiété/Angoisse",
+          "Dépression",
+          "Autres troubles"
+        ],
+        "link": "https://www.nightline.fr/kit-de-vie"
+      },
+      {
+        "id": "jefpsy",
+        "icon": "🌐",
+        "title": "jefpsy.org",
+        "desc": "Site dédié aux jeunes (enfants, frères, sœurs) d'une personne ayant des troubles psychiques.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Proches aidants"
+        ],
+        "link": "https://jefpsy.org"
+      },
+      {
+        "id": "maisonperchee",
+        "icon": "🌐",
+        "title": "maisonperchee.org",
+        "desc": "Communauté non médicalisée accompagnant les jeunes adultes avec un trouble psy et leur entourage, basée sur la pair-aidance.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Dépression",
+          "Bipolarité",
+          "Schizophrénie",
+          "Borderline / TPL",
+          "Proches aidants"
+        ],
+        "link": "https://maisonperchee.org"
+      },
+      {
+        "id": "argos-bipolaire",
+        "icon": "🌐",
+        "title": "argos2001.fr – Aide aux patients bipolaires",
+        "desc": "Association d'aide et de soutien pour les patients avec trouble bipolaire.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Bipolarité"
+        ],
+        "link": "https://www.argos2001.fr"
+      },
+      {
+        "id": "bipolaritefrance",
+        "icon": "🌐",
+        "title": "bipolaritefrance.com",
+        "desc": "Site de l'association Bipolarité France : informations, ressources et soutien.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Bipolarité"
+        ],
+        "link": "https://bipolaritefrance.com"
+      },
+      {
+        "id": "troubles-bipolaires-com",
+        "icon": "🌐",
+        "title": "troubles-bipolaires.com",
+        "desc": "Caractéristiques de la maladie bipolaire, ses traitements et le quotidien avec la maladie.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Bipolarité"
+        ],
+        "link": "https://troubles-bipolaires.com"
+      },
+      {
+        "id": "lebipolaire-forum",
+        "icon": "🌐",
+        "title": "lebipolaire.com – Forum pour bipotes",
+        "desc": "Forum d'entraide de patients souffrant de bipolarité.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Bipolarité"
+        ],
+        "link": "https://www.lebipolaire.com/forumpourbipotes"
+      },
+      {
+        "id": "schizo-oui",
+        "icon": "🌐",
+        "title": "schizo-oui.com",
+        "desc": "Association nationale accompagnant depuis plus de 25 ans les personnes souffrant de troubles schizophréniques et leurs proches.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Schizophrénie",
+          "Trouble schizo-affectif"
+        ],
+        "link": "https://www.schizo-oui.com"
+      },
+      {
+        "id": "mafamilledeouf",
+        "icon": "🌐",
+        "title": "mafamilledeouf.com",
+        "desc": "Pour les proches : bien vivre avec une personne atteinte de schizophrénie, bipolarité ou dépression.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Schizophrénie",
+          "Bipolarité",
+          "Dépression",
+          "Proches aidants"
+        ],
+        "link": "https://mafamilledeouf.com"
+      },
+      {
+        "id": "mediagoras-anxiete",
+        "icon": "🌐",
+        "title": "mediagoras.fr – Phobies & anxiété",
+        "desc": "Association de celles et ceux qui souffrent de phobies ou d'anxiété.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Anxiété/Angoisse"
+        ],
+        "link": "https://mediagoras.fr"
+      },
+      {
+        "id": "conexion-familiale-borderline",
+        "icon": "🌐",
+        "title": "proches-borderline.org – Connexion Familiale",
+        "desc": "Association de proches de personnes avec un TPB, avec programme de psychoéducation pour les familles.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Borderline / TPL",
+          "Proches aidants"
+        ],
+        "link": "https://proches-borderline.org"
+      },
+      {
+        "id": "abigail-barrand-borderline",
+        "icon": "🌐",
+        "title": "abigailbarrand.com – Experte de vécu borderline",
+        "desc": "Conférencière et experte de vécu sur le trouble borderline, la santé mentale et l'hôpital psy.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Borderline / TPL"
+        ],
+        "link": "https://abigailbarrand.com"
+      },
+      {
+        "id": "borderattitude",
+        "icon": "🌐",
+        "title": "borderattitude.fr",
+        "desc": "Site réalisé par une personne concernée, riche en informations et partages d'expériences sur le borderline.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Borderline / TPL"
+        ],
+        "link": "https://borderattitude.fr"
+      },
+      {
+        "id": "tdah-france-hypersupers",
+        "icon": "🌐",
+        "title": "tdah-france.fr – HyperSupers TDAH France",
+        "desc": "Association HyperSupers TDAH France : aide aux familles, adultes et enfants concernés par le TDAH.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://www.tdah-france.fr"
+      },
+      {
+        "id": "tdah-partout-pareil",
+        "icon": "🌐",
+        "title": "tdah-partout-pareil.info",
+        "desc": "Association internationale francophone dédiée au TDAH.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://tdah-partout-pareil.info"
+      },
+      {
+        "id": "tdah-age-adulte",
+        "icon": "🌐",
+        "title": "tdah-age-adulte.fr",
+        "desc": "Site sur les spécificités du TDAH adulte, créé bénévolement par une professionnelle concernée.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "http://tdah-age-adulte.fr"
+      },
+      {
+        "id": "attentiondeficit-info",
+        "icon": "🌐",
+        "title": "attentiondeficit-info.com",
+        "desc": "Site canadien sur le TDAH proposé par la Dr Annick Vincent et ses collaborateurs.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "http://attentiondeficit-info.com"
+      },
+      {
+        "id": "gncra-autisme",
+        "icon": "🌐",
+        "title": "gncra.fr – Centres de Ressources Autisme",
+        "desc": "Groupement National qui fédère et représente les 26 Centres de Ressources Autisme de France.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TSA / autisme"
+        ],
+        "link": "https://gncra.fr"
+      },
+      {
+        "id": "tamis-autisme-idf",
+        "icon": "🌐",
+        "title": "tamis-autisme.org – Réseau Tamis",
+        "desc": "Annuaire de ressources sur l'autisme en Île-de-France.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "TSA / autisme"
+        ],
+        "link": "https://tamis-autisme.org"
+      },
+      {
+        "id": "reseau-morphee-sommeil",
+        "icon": "🌐",
+        "title": "reseau-morphee.fr",
+        "desc": "Réseau de santé consacré à la prise en charge des troubles chroniques du sommeil.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Troubles du sommeil"
+        ],
+        "link": "https://reseau-morphee.fr"
+      },
+      {
+        "id": "fondation-sommeil",
+        "icon": "🌐",
+        "title": "fondationsommeil.com",
+        "desc": "Association québécoise au service des patients souffrant de troubles du sommeil.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Troubles du sommeil"
+        ],
+        "link": "https://fondationsommeil.com"
+      },
+      {
+        "id": "questionsexualite-fr",
+        "icon": "🌐",
+        "title": "questionsexualite.fr",
+        "desc": "Guide complet de Santé Publique France sur la sexualité, y compris à l'adolescence.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Autres troubles"
+        ],
+        "link": "https://questionsexualite.fr"
+      },
+      {
+        "id": "app-petit-bambou",
+        "icon": "📱",
+        "title": "Petit Bambou – Méditation",
+        "desc": "Application de méditation guidée avec la voix du psychiatre Christophe André.",
+        "type": "Applis",
+        "troubles": [
+          "Dépression",
+          "Anxiété/Angoisse",
+          "Troubles du sommeil"
+        ],
+        "link": "https://www.petitbambou.com"
+      },
+      {
+        "id": "app-headspace",
+        "icon": "📱",
+        "title": "Headspace – Pleine conscience",
+        "desc": "Méditations guidées pour réduire le stress, l'anxiété et améliorer le sommeil.",
+        "type": "Applis",
+        "troubles": [
+          "Dépression",
+          "Anxiété/Angoisse",
+          "Troubles du sommeil"
+        ],
+        "link": "https://www.headspace.com"
+      },
+      {
+        "id": "app-daylio",
+        "icon": "📱",
+        "title": "Daylio – Suivi quotidien des émotions",
+        "desc": "Application simple pour collecter ses émotions selon ses activités quotidiennes.",
+        "type": "Applis",
+        "troubles": [
+          "Dépression",
+          "Bipolarité",
+          "Anxiété/Angoisse",
+          "Borderline / TPL"
+        ],
+        "link": "https://daylio.net"
+      },
+      {
+        "id": "app-mon-suivi-psy",
+        "icon": "📱",
+        "title": "Mon Suivi Psy – Suivi quotidien",
+        "desc": "Application gratuite pour recenser symptômes et ressentis et les transmettre à son psychiatre.",
+        "type": "Applis",
+        "troubles": [
+          "Dépression",
+          "Bipolarité",
+          "Schizophrénie",
+          "Borderline / TPL",
+          "Trouble schizo-affectif"
+        ],
+        "link": "https://www.monsuivipsy.fr"
+      },
+      {
+        "id": "app-mon-sherpa",
+        "icon": "📱",
+        "title": "Mon Sherpa – Soutien psychologique",
+        "desc": "Application de soutien psychologique pour les personnes souffrant d'anxiété, de troubles du sommeil ou de stress.",
+        "type": "Applis",
+        "troubles": [
+          "Anxiété/Angoisse",
+          "Dépression",
+          "Troubles du sommeil"
+        ],
+        "link": "https://www.monsherpa.fr"
+      },
+      {
+        "id": "app-emoteo",
+        "icon": "📱",
+        "title": "Emotéo – Météo des émotions",
+        "desc": "Évalue l'état de tension interne et le régule grâce à des exercices d'apaisement.",
+        "type": "Applis",
+        "troubles": [
+          "Bipolarité",
+          "Borderline / TPL",
+          "Anxiété/Angoisse",
+          "Trouble schizo-affectif"
+        ],
+        "link": "https://www.emoteo.fr"
+      },
+      {
+        "id": "app-jardin-mental",
+        "icon": "📱",
+        "title": "Jardin Mental – Journal personnalisable",
+        "desc": "Journal pour évaluer son état de santé mentale, suivre son évolution et comprendre ce qui l'influence.",
+        "type": "Applis",
+        "troubles": [
+          "Autres troubles"
+        ],
+        "link": "https://jardinmental.fabrique.social.gouv.fr"
+      },
+      {
+        "id": "instagram-la-mini-coach-tdah",
+        "icon": "📲",
+        "title": "La mini coach TDAH – Instagram",
+        "desc": "Compte Instagram dédié au TDAH avec conseils pratiques et ressources.",
+        "type": "Réseaux sociaux",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://www.instagram.com/la_mini_coach_tdah/"
       }
     ]
   },
@@ -2307,6 +2888,365 @@
           "Proches aidants"
         ],
         "link": "https://sentinelledesaidants.fr/"
+      },
+      {
+        "id": "period-studio-hana-bipolarite",
+        "icon": "🎬",
+        "title": "La bipolarité expliquée par Hana – Period Studio",
+        "desc": "Hana prend la parole pour déstigmatiser les maladies psy et raconter son parcours avec la bipolarité.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Bipolarité"
+        ],
+        "link": "https://www.instagram.com/tv/CV--IBnlKjc/?utm_source=ig_web_copy_link"
+      },
+      {
+        "id": "psylab-personne-schizophrene",
+        "icon": "🎬",
+        "title": "Personne n'est schizophrène ! – PsychOptik #4 (Le PsyLab)",
+        "desc": "Le PsyLab déconstruit la stigmatisation autour de la schizophrénie.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://www.youtube.com/@lepsylab"
+      },
+      {
+        "id": "psycare-hallucinations",
+        "icon": "🎬",
+        "title": "PsyCARE – Les hallucinations",
+        "desc": "Série animée qui explique les hallucinations dans le cadre des troubles psychiques.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie",
+          "Trouble schizo-affectif"
+        ],
+        "link": "https://youtu.be/Lbrz36OGXms"
+      },
+      {
+        "id": "psycare-idees-delirantes",
+        "icon": "🎬",
+        "title": "PsyCARE – Les idées délirantes",
+        "desc": "Série animée qui explique les idées délirantes dans les troubles psychotiques.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie",
+          "Trouble schizo-affectif"
+        ],
+        "link": "https://youtu.be/AJOZFOzafrk"
+      },
+      {
+        "id": "psycare-symptomes-negatifs",
+        "icon": "🎬",
+        "title": "PsyCARE – Les symptômes négatifs",
+        "desc": "Série animée qui explique les symptômes négatifs de la schizophrénie.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://youtu.be/Nn8zyaJ73vg"
+      },
+      {
+        "id": "chu-lille-troubles-emergents",
+        "icon": "🎬",
+        "title": "Troubles psychiatriques émergents : intervenir précocement – CHU de Lille",
+        "desc": "Le Pr Pierre Thomas alerte sur l'importance du repérage précoce des signes d'épisode psychotique.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://www.youtube.com/watch?v=7kCXyfdsLwU"
+      },
+      {
+        "id": "ciusss-troubles-psychotiques-ados",
+        "icon": "🎬",
+        "title": "Les troubles psychotiques chez les adolescents – CIUSSS Montréal",
+        "desc": "Capsule éducative animée par la travailleuse sociale Caroline Bolduc sur les troubles psychotiques adolescents.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://www.youtube.com/watch?v=p9TdAv32-lc"
+      },
+      {
+        "id": "psykocouac-crise-psychotique",
+        "icon": "🎬",
+        "title": "Crise psychotique – Psykocouac",
+        "desc": "Pedro Sancho, psychologue, explique la crise psychotique dans un format illustré et décomplexé.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Schizophrénie",
+          "Trouble schizo-affectif"
+        ],
+        "link": "https://www.youtube.com/watch?v=Ce_Uo4NU5ws"
+      },
+      {
+        "id": "dr-fond-schizo-affectif",
+        "icon": "🎬",
+        "title": "Le trouble schizo-affectif – Dr Guillaume Fond",
+        "desc": "Le psychiatre répond à 3 questions clés sur le diagnostic et l'évolution du trouble schizo-affectif.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Trouble schizo-affectif"
+        ],
+        "link": "https://www.youtube.com/watch?v=Z4322z9G5Mc"
+      },
+      {
+        "id": "psykocouac-borderline",
+        "icon": "🎬",
+        "title": "Trouble de la personnalité borderline – Psychokouac",
+        "desc": "Pedro Sancho, psychologue, explique le trouble de la personnalité borderline.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Borderline / TPL"
+        ],
+        "link": "https://youtu.be/ICSWs7PlN4g?feature=shared"
+      },
+      {
+        "id": "psy-tdah-tout-savoir",
+        "icon": "🎬",
+        "title": "TDAH, tout ce qu'il faut savoir en une vidéo – Psy!",
+        "desc": "Vidéo synthétique et accessible sur le TDAH chez l'enfant et l'adulte.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://www.youtube.com/watch?v=EwW4yW1Litg"
+      },
+      {
+        "id": "radio-canada-tdah-adulte",
+        "icon": "🎬",
+        "title": "Le TDAH chez l'adulte – Radio Canada",
+        "desc": "Reportage sur le TDAH à l'âge adulte, ses manifestations et ses défis au quotidien.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://www.youtube.com/watch?v=4nkFS4TCLlA"
+      },
+      {
+        "id": "fabien-olicard-tdah",
+        "icon": "🎬",
+        "title": "Sommes-nous tous devenus TDAH ? – Fabien Olicard",
+        "desc": "Réflexion sur la sur-représentation du TDAH et l'hyperconnectivité dans notre société.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://www.youtube.com/watch?v=FW25Vmgf8CE"
+      },
+      {
+        "id": "psycare-fonctions-cognitives",
+        "icon": "🎬",
+        "title": "PsyCARE – Les fonctions cognitives",
+        "desc": "Série animée qui explique les fonctions cognitives et leur lien avec les troubles psychiques.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Fonctions cognitives"
+        ],
+        "link": "https://www.youtube.com/watch?v=liR-W9DRmgU"
+      },
+      {
+        "id": "psycare-strategies-cognitives",
+        "icon": "🎬",
+        "title": "PsyCARE – Les stratégies cognitives",
+        "desc": "Série animée sur les stratégies pour mieux gérer les fonctions cognitives.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Fonctions cognitives"
+        ],
+        "link": "https://www.youtube.com/watch?v=GJo5jceRfOA"
+      },
+      {
+        "id": "cerveau-mode-emploi",
+        "icon": "🎬",
+        "title": "Cerveau, mode d'emploi – Sciences cognitives de l'apprentissage",
+        "desc": "Chaîne YouTube dédiée aux sciences cognitives et à leur application dans l'apprentissage.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Fonctions cognitives"
+        ],
+        "link": "https://www.youtube.com/@cerveaumodedemploi1696"
+      },
+      {
+        "id": "podcast-science-maladies-mentales",
+        "icon": "🎙️",
+        "title": "Les maladies mentales – Clara Moreau (Podcast Science)",
+        "desc": "Épisode couvrant le trouble schizo-affectif et les troubles thymiques.",
+        "type": "Podcast",
+        "troubles": [
+          "Trouble schizo-affectif",
+          "Bipolarité"
+        ],
+        "link": "https://www.podcastscience.fm/dossiers/2015/01/20/les-maladies-mentales-par-clara-moreau/"
+      },
+      {
+        "id": "refer-o-scope",
+        "icon": "🌐",
+        "title": "refer-o-scope.com – Psychose",
+        "desc": "Site dédié à la psychose avec vidéos explicatives et auto-questionnaire en ligne.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://refer-o-scope.com"
+      },
+      {
+        "id": "aforpel-etat-limite",
+        "icon": "🌐",
+        "title": "aforpel.org – État limite / borderline",
+        "desc": "Association pour la formation et la promotion de l'état limite : stages, conférences, groupes de parole.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Borderline / TPL"
+        ],
+        "link": "https://aforpel.org"
+      },
+      {
+        "id": "igor-thiriez-psychiatrie",
+        "icon": "🌐",
+        "title": "igorthiriez.com – Psychiatrie & rétablissement",
+        "desc": "Fiches de vulgarisation des termes psychiatriques par un psychiatre défendant une psychiatrie humaine.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Borderline / TPL",
+          "Autres troubles"
+        ],
+        "link": "https://igorthiriez.com"
+      },
+      {
+        "id": "tcd-montreal-borderline",
+        "icon": "🌐",
+        "title": "tcdmontreal.com – Thérapie comportementale dialectique",
+        "desc": "Site québécois dédié à la TCD pour le trouble borderline, avec ressources et chaîne YouTube.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Borderline / TPL"
+        ],
+        "link": "https://www.tcdmontreal.com"
+      },
+      {
+        "id": "raptorneuropsy",
+        "icon": "🌐",
+        "title": "raptorneuropsy.com",
+        "desc": "Association qui informe et vulgarise la psychiatrie, la neuropsychologie et les apprentissages.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Fonctions cognitives",
+          "Autres troubles"
+        ],
+        "link": "https://www.raptorneuropsy.com"
+      },
+      {
+        "id": "lecerveau-mcgill",
+        "icon": "🌐",
+        "title": "lecerveau.mcgill.ca",
+        "desc": "Site web interactif de McGill sur le cerveau et le fonctionnement humain.",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Fonctions cognitives"
+        ],
+        "link": "https://lecerveau.mcgill.ca"
+      },
+      {
+        "id": "cerveau-laval-neuropsychologie",
+        "icon": "🌐",
+        "title": "cerveau.psy.ulaval.ca – Neuropsychologie",
+        "desc": "Trousse d'accompagnement sur le fonctionnement neuropsychologique (4 volets : théorique, ados, jeunes adultes, entourage).",
+        "type": "Site internet / Blog",
+        "troubles": [
+          "Fonctions cognitives"
+        ],
+        "link": "https://www.cerveau.psy.ulaval.ca"
+      },
+      {
+        "id": "brochure-unafam-schizo-patients",
+        "icon": "📄",
+        "title": "Un nouveau regard vers l'avenir – Unafam (patients)",
+        "desc": "Guide d'information et d'accompagnement à l'usage des patients souffrant de schizophrénie.",
+        "type": "Article / Livre",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://www.unafam.org/sites/default/files/fichiers-joints/04-2020/Un%20nouveau%20regard%20vers%20l%27Avenir%20Patients.pdf"
+      },
+      {
+        "id": "brochure-unafam-schizo-proches",
+        "icon": "📄",
+        "title": "Un nouveau regard vers l'avenir – Unafam (proches)",
+        "desc": "Guide d'information et d'accompagnement à l'usage des proches et familles de personnes schizophrènes.",
+        "type": "Article / Livre",
+        "troubles": [
+          "Schizophrénie",
+          "Proches aidants"
+        ],
+        "link": "https://www.unafam.org/sites/default/files/fichiers-joints/04-2020/Un%20nouveau%20regard%20vers%20l%27Avenir%20Familles%20et%20Aidants.pdf"
+      },
+      {
+        "id": "schizinfo-vivre-avec",
+        "icon": "📄",
+        "title": "Vivre avec la schizophrénie – Schizinfo",
+        "desc": "Guide à l'intention des personnes souffrant de la maladie et de leurs proches.",
+        "type": "Article / Livre",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://schizinfo.com/wp-content/uploads/2018/02/Vivre-avec-la-schizophrenie.pdf"
+      },
+      {
+        "id": "schizinfo-premier-episode",
+        "icon": "📄",
+        "title": "Le premier épisode psychotique – Schizinfo / CHUV",
+        "desc": "Brochure d'information sur le premier épisode psychotique, ses signes et sa prise en charge.",
+        "type": "Article / Livre",
+        "troubles": [
+          "Schizophrénie"
+        ],
+        "link": "https://schizinfo.com/app/uploads/2022/03/Premier-episode-psychotique.pdf"
+      },
+      {
+        "id": "borderline-promentesana",
+        "icon": "📄",
+        "title": "Le trouble de la personnalité borderline – PromenteSana",
+        "desc": "Brochure pour comprendre le trouble borderline et trouver de l'aide.",
+        "type": "Article / Livre",
+        "troubles": [
+          "Borderline / TPL"
+        ],
+        "link": "https://www.promentesana.org/wp-content/uploads/2020/02/Borderline2014.pdf"
+      },
+      {
+        "id": "tdah-fiche-raptorneuropsy",
+        "icon": "📄",
+        "title": "Le TDAH – Fiche RaptorNeuropsy",
+        "desc": "Fiche d'information illustrée sur le TDAH par l'association RaptorNeuropsy.",
+        "type": "Article / Livre",
+        "troubles": [
+          "TDAH adulte"
+        ],
+        "link": "https://www.raptorneuropsy.com/_files/ugd/ace62b_14d6414e273b4683973e1cd5529dec3c.pdf"
+      },
+      {
+        "id": "brochure-bien-dormir",
+        "icon": "📄",
+        "title": "Bien dormir, mieux vivre – Santé Publique France",
+        "desc": "Brochure Inpes : le sommeil, c'est la santé ! Conseils pratiques pour bien dormir.",
+        "type": "Article / Livre",
+        "troubles": [
+          "Troubles du sommeil"
+        ],
+        "link": "http://inpes.santepubliquefrance.fr/CFESBases/catalogue/pdf/1215.pdf"
+      },
+      {
+        "id": "brochure-sommeil-morphee",
+        "icon": "📄",
+        "title": "Le sommeil mode d'emploi – Réseau Morphée",
+        "desc": "Brochure à destination des jeunes et de leurs parents sur le sommeil.",
+        "type": "Article / Livre",
+        "troubles": [
+          "Troubles du sommeil"
+        ],
+        "link": "https://www.reseau-morphee.fr/wp-content/plugins/downloads-manager/upload/brochure_web-DEFINITIVE.pdf"
       }
     ]
   },
@@ -2593,6 +3533,50 @@
         "desc": "Ressource utile et accessible.",
         "type": "Infographie",
         "troubles": []
+      },
+      {
+        "id": "brut-asperger-paul-el-kharrat",
+        "icon": "🎬",
+        "title": "3 clichés sur le syndrome d'Asperger – Paul El Kharrat par Brut",
+        "desc": "Paul El Kharrat déconstruit 3 clichés courants sur le syndrome d'Asperger.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "TSA / autisme"
+        ],
+        "link": "https://www.youtube.com/results?search_query=3+clich%C3%A9s+Asperger+Paul+El+Kharrat+Brut"
+      },
+      {
+        "id": "brut-autisme-feminin-dachez",
+        "icon": "🎬",
+        "title": "Les spécificités de l'autisme féminin – Julie Dachez par Brut",
+        "desc": "Julie Dachez parle des particularités de l'autisme au féminin, souvent sous-diagnostiqué.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "TSA / autisme"
+        ],
+        "link": "https://www.youtube.com/results?search_query=sp%C3%A9cificit%C3%A9s+autisme+f%C3%A9minin+Julie+Dachez+Brut"
+      },
+      {
+        "id": "brut-5-cliches-films",
+        "icon": "🎬",
+        "title": "5 clichés sur les troubles psychiques dans les films – Brut",
+        "desc": "Déconstruction de 5 idées reçues véhiculées par le cinéma sur les maladies mentales.",
+        "type": "Vidéo / Film",
+        "troubles": [
+          "Autres troubles"
+        ],
+        "link": "https://www.youtube.com/results?search_query=5+clich%C3%A9s+troubles+psychiques+films+Brut"
+      },
+      {
+        "id": "programme-b-sante-mentale",
+        "icon": "🎙️",
+        "title": "Programme B – La santé mentale dont vous êtes le héro",
+        "desc": "Série de 4 épisodes sur la santé mentale et la stigmatisation.",
+        "type": "Podcast",
+        "troubles": [
+          "Autres troubles"
+        ],
+        "link": "https://www.binge.audio/podcast/programme-b"
       }
     ]
   }
